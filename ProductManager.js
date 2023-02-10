@@ -1,5 +1,7 @@
-const fs = require("fs");
-class ProductManager {
+import fs from "fs";
+import { Product } from "./Product.js";
+
+export class ProductManager {
   constructor(path) {
     this.path = path;
     if (!fs.existsSync(this.path)) {
@@ -31,7 +33,7 @@ class ProductManager {
 
       if (elements.find((e) => e.code === code) === undefined) {
         elements.push(
-          new Products(
+          new Product(
             +elements.length,
             title,
             description,
@@ -71,8 +73,7 @@ class ProductManager {
 
   async getProducts() {
     const readData = await fs.promises.readFile(this.path, "utf-8");
-    console.log(JSON.parse(readData));
-    return readData;
+    return JSON.parse(readData);
   }
 
   async getProductById(id) {
@@ -87,65 +88,3 @@ class ProductManager {
     }
   }
 }
-
-class Products {
-  id;
-  title;
-  description;
-  price;
-  thumbnail;
-  code;
-  stock;
-  constructor(id, title, description, price, thumbnail, code, stock) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.thumbnail = thumbnail;
-    this.code = code;
-    this.stock = stock;
-  }
-}
-
-async function main() {
-  const productManager = new ProductManager("./data.json");
-  //   await productManager.addProduct({
-  //     title: "Car",
-  //     description: "V8",
-  //     price: 50000,
-  //     thumbnail: "carv8.jpg",
-  //     code: 45798,
-  //     stock: 3,
-  //   });
-  //   await productManager.addProduct({
-  //     title: "Car2",
-  //     description: "V6",
-  //     price: 40000,
-  //     thumbnail: "carv6.jpg",
-  //     code: 45791,
-  //     stock: 5,
-  //   });
-  //   await productManager.addProduct({
-  //     title: "Car3",
-  //     description: "L4",
-  //     price: 32000,
-  //     thumbnail: "carL4.jpg",
-  //     code: 45795,
-  //     stock: 5,
-  //   });
-
-  //   await productManager.updateProduct(0, {
-  //     title: "Cambio",
-  //     description: "Cambiado",
-  //     price: 100000,
-  //     thumbnail: "carv8.jpg",
-  //     code: 457988,
-  //     stock: 3,
-  //   });
-
-  //   console.log(await productManager.getProductById(1));
-  //   await productManager.deleteProduct(1);
-  //   await productManager.getProducts();
-}
-
-main();
