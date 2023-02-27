@@ -3,16 +3,33 @@ import { FileManager } from "../managers/FileManager.js";
 import { Product } from "../classes/Product.js";
 
 const routerProducts = Router();
-const ManagerProduct = new FileManager("./data/dataProduct.json");
+const ManagerProduct = new FileManager("./src/data/dataProduct.json");
 
 routerProducts.get("/", async (req, res) => {
   const limit = parseInt(req.query.limit);
-  const products = await ManagerProduct.getByKey();
+  let products = await ManagerProduct.getByKey();
+
   if (products.length >= limit) {
-    res.status(200).json(products.slice(0, limit));
-  } else {
-    res.status(200).json(products);
+    products = products.slice(0, limit);
+    res.status(200);
   }
+  let isProducts = products.length > 0;
+
+  let productsToShow = products.map((e) => ({
+    title: e.title,
+    description: e.description,
+    code: e.code,
+    price: e.price,
+    status: e.status,
+    category: e.category,
+    stock: e.stock,
+    thumbnails: e.thumbnails,
+  }));
+
+  res.render("home", {
+    isProducts,
+    productsToShow,
+  });
 });
 
 routerProducts.get("/:pid", async (req, res) => {

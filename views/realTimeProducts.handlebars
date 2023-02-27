@@ -1,0 +1,29 @@
+<h2>{{title}}</h2>
+
+<h3>Add new Product</h3>
+
+Title:
+<input id="inputTitle" type="text" />
+Description:
+<input id="inputDescription" type="text" />
+Code:
+<input id="inputCode" type="text" />
+Price:
+<input id="inputPrice" type="text" />
+Status:
+<input id="inputStatus" type="text" />
+Category:
+<input id="inputCategory" type="text" />
+Stock:
+<input id="inputStock" type="text" />
+Thumbnails:
+<input id="inputThumbnails" type="text" />
+
+<button id="btnSubmit">Add Product</button>
+<h3>Products</h3>
+<div id="products">
+  {{value}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>

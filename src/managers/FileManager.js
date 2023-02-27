@@ -54,9 +54,9 @@ export class FileManager {
     }
   }
 
-  async getById(nameId, valueId) {
+  async getById( valueId) {
     let elements = await this.read();
-    return elements.find((e) => e[nameId] === valueId);
+    return elements.find((e) => e.id === valueId);
   }
 
   async updateElement(key, value, toUpdate = {}) {

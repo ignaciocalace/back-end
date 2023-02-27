@@ -10,7 +10,7 @@ export class Product {
   thumbnails;
 
   isEmpty(toCheck) {
-    if (toCheck != "") {
+    if (toCheck != "" && toCheck != undefined) {
       return true;
     } else {
       throw new Error(`One or more info is empty`);
