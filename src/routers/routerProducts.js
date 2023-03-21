@@ -1,20 +1,17 @@
 import { Router } from "express";
-import { FileManager } from "../managers/FileManager.js";
-import { Product } from "../classes/Product.js";
+import { Product } from "../dao/models/Product.js";
+import { productsService } from "../services/products.service.js";
 
 const routerProducts = Router();
-const ManagerProduct = new FileManager("./src/data/dataProduct.json");
 
 routerProducts.get("/", async (req, res) => {
-  const limit = parseInt(req.query.limit);
-  let products = await ManagerProduct.getByKey();
-
+  let limit = parseInt(req.query.limit);
+  isNaN(limit) ? (limit = undefined) : {};
+  let products = await productsService.showProduct(undefined, undefined, limit);
   if (products.length >= limit) {
-    products = products.slice(0, limit);
-    res.status(200);
+    res.status(200).json(products);
   }
   let isProducts = products.length > 0;
-
   let productsToShow = products.map((e) => ({
     title: e.title,
     description: e.description,
@@ -25,22 +22,21 @@ routerProducts.get("/", async (req, res) => {
     stock: e.stock,
     thumbnails: e.thumbnails,
   }));
-
-  res.render("home", {
+  res.render("products", {
     isProducts,
     productsToShow,
   });
 });
 
 routerProducts.get("/:pid", async (req, res) => {
-  const pid = parseInt(req.params.pid);
-  if (!isNaN(pid)) {
-    let showProductId = await ManagerProduct.getByKey("id", pid);
+  try {
+    const pid = req.params.pid;
+    let showProductId = await productsService.showProduct("_id", pid);
     showProductId
       ? res.status(200).json(showProductId)
       : res.status(404).json("This product id do not exist");
-  } else {
-    res.status(404).json("This product id do not exist");
+  } catch (err) {
+    res.status(400).json(err);
   }
 });
 
@@ -48,9 +44,9 @@ routerProducts.post("/", async (req, res) => {
   try {
     const dataProduct = req.body;
     const newProduct = new Product(dataProduct);
-    let elements = await ManagerProduct.getByKey();
-    if (elements.find((e) => e.code === newProduct.code) === undefined) {
-      await ManagerProduct.createElement(newProduct);
+    const elements = await productsService.showProduct("code", newProduct.code);
+    if (elements.length === 0) {
+      await productsService.addProduct(newProduct);
       res.status(201).json("Product added successfully");
     } else {
       res.status(200).json("Code product alredy added");
@@ -64,13 +60,13 @@ routerProducts.post("/", async (req, res) => {
 routerProducts.put("/:pid", async (req, res) => {
   try {
     const dataProduct = req.body;
-    const pid = parseInt(req.params.pid);
-    const updatedProduct = await ManagerProduct.updateElement(
-      "id",
+    const pid = req.params.pid;
+    const updatedProduct = await productsService.updatedProduct(
+      "_id",
       pid,
       dataProduct
     );
-    updatedProduct
+    updatedProduct.matchedCount = 1
       ? res.status(201).json("Product updated successfully")
       : res.status(200).json("Id product do not exist");
   } catch (err) {
@@ -80,11 +76,12 @@ routerProducts.put("/:pid", async (req, res) => {
 
 routerProducts.delete("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
-    const deleteElement = await ManagerProduct.deleteElement(pid);
-    deleteElement
+    const pid = req.params.pid;
+    const deleteElement = await productsService.deleteProduct("_id", pid);
+    console.log(deleteElement);
+    deleteElement.deletedCount === 1
       ? res.status(200).json("Product deleted successfully")
-      : res.status(204).json("Id product do not exist");
+      : res.status(404).json("Id product do not exist");
   } catch (err) {
     res.status(400).json(err);
   }

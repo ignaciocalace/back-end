@@ -1,11 +1,14 @@
 import express from "express";
-import handlebars from "express-handlebars";
+import mongoose from "mongoose";
 import { Server } from "socket.io";
-import routerCarts from "./routers/routerCart.js";
+import handlebars from "express-handlebars";
+import routerCarts from "./routers/routerCarts.js";
+import { MONGODB_CNX_STR } from "./config/mongodb.js";
 import routerProducts from "./routers/routerProducts.js";
-import { FileManager } from "./managers/FileManager.js";
+import { FileManager } from "./dao/FileSystem/FileManager.js";
 import { routerRealTime } from "./routers/routerRealTime.js";
-import { Product } from "./classes/Product.js";
+import { ProductsSocket } from "./sockets/products.socket.js";
+import { MessagesSocket } from "./sockets/messages.socket.js";
 
 const app = express();
 
@@ -24,10 +27,17 @@ app.use("/realtimeproducts", routerRealTime);
 app.get("/", async (req, res) => {
   res.render("home", {});
 });
+app.get("/chat", (req, res) => {
+  res.render("chat", { title: "Chat" });
+});
 
 const port = 8080;
+
+await mongoose.connect(MONGODB_CNX_STR);
+const db = mongoose.connection;
+
 const httpServer = app.listen(port, () => {
-  console.log("Conected");
+  console.log(`Conected to port ${port}`);
 });
 
 const io = new Server(httpServer);
@@ -35,14 +45,6 @@ const ManagerProduct = new FileManager("./src/data/dataProduct.json");
 
 io.on("connection", (socket) => {
   console.log("New socket conected");
-
-  socket.on("newProduct", async (product) => {
-    const newProduct = new Product(product);
-    await ManagerProduct.createElement(newProduct);
-    io.sockets.emit("refreshProducts", await ManagerProduct.getByKey());
-  });
-
-  socket.on("updateProducts", async () => {
-    io.sockets.emit("refreshProducts", await ManagerProduct.getByKey());
-  });
+  ProductsSocket(io, socket);
+  MessagesSocket(io, socket);
 });

@@ -1,0 +1,22 @@
+<div>
+  {{#if isProducts}}
+    <h3>Products</h3>
+    {{#each productsToShow}}
+      <ul>
+
+        <li>Title: {{title}}</li>
+        <li>Description: {{description}}</li>
+        <li>Code: {{code}}</li>
+        <li>Price: {{price}}</li>
+        <li>Status: {{status}}</li>
+        <li>Category: {{category}}</li>
+        <li>Stock: {{stock}}</li>
+        <li>Thumbnails: {{thumbnails}}</li>
+
+      </ul>
+    {{/each}}
+
+  {{else}}
+    <h3>No hay productos para mostrar</h3>
+  {{/if}}
+</div>

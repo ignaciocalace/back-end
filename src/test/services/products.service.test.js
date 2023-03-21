@@ -7,10 +7,10 @@ import { cartsService } from "../../services/carts.service.js";
 import { productsService } from "../../services/products.service.js";
 
 await mongoose.connect(MONGODB_CNX_STR);
-const createCart = new Cart();
-const newCart = await cartsService.createCart(createCart);
-const productId = "64149ee67c3920cd2a6d2415";
-const cartId = "6414d46633f84bd1cbf5bcb0";
+// const createCart = new Cart();
+// const newCart = await cartsService.createCart(createCart);
+// const productId = "64149ee67c3920cd2a6d2415";
+// const cartId = "6414d46633f84bd1cbf5bcb0";
 // let productToAdd = await productsService.show("_id", productId);
 // let addToCart = await cartsService.addToCart(cartId, productId);
 // console.log(addToCart);
@@ -44,5 +44,5 @@ const cartId = "6414d46633f84bd1cbf5bcb0";
 
 // let showAll = await productsService.show();
 
-console.log(showProductId);
+// console.log(showProductId);
 mongoose.connection.close();
