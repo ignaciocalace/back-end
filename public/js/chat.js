@@ -31,7 +31,6 @@ Swal.fire({
 });
 
 document.querySelector("#btnNewMsg")?.addEventListener("click", (ev) => {
-  console.log("click");
   if (
     inputUser instanceof HTMLInputElement &&
     inputMsg instanceof HTMLInputElement &&

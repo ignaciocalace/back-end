@@ -78,7 +78,6 @@ routerProducts.delete("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
     const deleteElement = await productsService.deleteProduct("_id", pid);
-    console.log(deleteElement);
     deleteElement.deletedCount === 1
       ? res.status(200).json("Product deleted successfully")
       : res.status(404).json("Id product do not exist");

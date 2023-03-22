@@ -25,7 +25,8 @@ document.getElementById("btnSubmit")?.addEventListener("click", () => {
 
   for (const input of inputs) {
     if (!(input instanceof HTMLInputElement)) {
-      if (input != inputThumbnails) {
+      console.log(input);
+      if (input != inputThumbnails || input != inputStatus) {
         instanceOfInputs = false;
         break;
       }
@@ -33,9 +34,15 @@ document.getElementById("btnSubmit")?.addEventListener("click", () => {
   }
 
   for (const input of inputs) {
-    if (!input.value) {
-      valueInputs = false;
-      break;
+    if (input.id != "inputThumbnails") {
+      if (input.id != "inputStatus") {
+        if (!input.value) {
+          valueInputs = false;
+          break;
+        }
+      } else {
+        inputStatus.value = true;
+      }
     }
   }
 

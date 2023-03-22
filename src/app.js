@@ -34,14 +34,12 @@ app.get("/chat", (req, res) => {
 const port = 8080;
 
 await mongoose.connect(MONGODB_CNX_STR);
-const db = mongoose.connection;
 
 const httpServer = app.listen(port, () => {
   console.log(`Conected to port ${port}`);
 });
 
 const io = new Server(httpServer);
-const ManagerProduct = new FileManager("./src/data/dataProduct.json");
 
 io.on("connection", (socket) => {
   console.log("New socket conected");
