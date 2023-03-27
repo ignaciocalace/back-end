@@ -1,0 +1,23 @@
+<div>
+  {{#if isProducts}}
+    <h3>Your Cart</h3>
+    {{#each cartToShow}}
+      <ul>
+
+        <li>Title: {{title}}</li>
+        <li>Description: {{description}}</li>
+        <li>Code: {{code}}</li>
+        <li>Price: {{price}}</li>
+        <li>Status: {{status}}</li>
+        <li>Category: {{category}}</li>
+        <li>Stock: {{stock}}</li>
+        <li>Thumbnails: {{thumbnails}}</li>
+        <li>Quantity: {{quantity}}</li>
+
+      </ul>
+    {{/each}}
+
+  {{else}}
+    <h3>No products on your cart</h3>
+  {{/if}}
+</div>

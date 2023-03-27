@@ -5,15 +5,8 @@ class CartsService {
     const productAdded = await cartManager.save(newCart);
     return productAdded;
   }
-
-  async addToCart(cartId, productId, newQuantity = 1) {
-    const newProduct = {
-      $push: { products: { _id: productId, quantity: newQuantity } },
-    };
-    let queryFilter = {};
-    queryFilter["_id"] = cartId;
-    const updateProduct = await cartManager.update(queryFilter, newProduct);
-    return updateProduct;
+  async getFirstCart(queryFilter) {
+    return await cartManager.getOne(queryFilter);
   }
 
   async showCart(filterVal, max, sortKey, sortVal) {
@@ -33,8 +26,13 @@ class CartsService {
     return await cartManager.get(queryFilter);
   }
 
-  async deleteCart(filterKey, filterVal) {
-    const deleteProduct = await cartManager.delete(filterKey, filterVal);
+  async deleteCartProducts(cartId, toDelete) {
+    let queryFilter = {};
+    let toPull = {};
+    queryFilter["_id"] = cartId;
+    toPull["_id"] = toDelete;
+    toPull = { $pull: { "products._id": toDelete } };
+    const deleteProduct = await cartManager.update({}, toPull);
     return deleteProduct;
   }
 
@@ -48,14 +46,24 @@ class CartsService {
     return updateProduct;
   }
 
-  async updateCart(cartId, productId) {
+  async updateProductCart(cartId, productId, newQuantity) {
     const newProduct = {
-      $inc: { "products.$.quantity": 1 },
+      "products.$.quantity": newQuantity,
     };
     let queryFilter = {};
     queryFilter["_id"] = cartId;
     queryFilter["products._id"] = productId;
     queryFilter = { $and: [queryFilter] };
+    const updateProduct = await cartManager.update(queryFilter, newProduct);
+    return updateProduct;
+  }
+
+  async updateCart(cartId, toUpdate) {
+    const newProduct = {
+      products: toUpdate,
+    };
+    let queryFilter = {};
+    queryFilter["_id"] = cartId;
     const updateProduct = await cartManager.update(queryFilter, newProduct);
     return updateProduct;
   }

@@ -1,6 +1,8 @@
+import { Schema } from "mongoose";
 import { ManagerMongoose } from "./ManagerMongoose.js";
+import mongoosePaginate from "mongoose-paginate-v2";
 
-export const productManager = new ManagerMongoose("products", {
+const productSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   code: { type: Number, required: true },
@@ -10,3 +12,7 @@ export const productManager = new ManagerMongoose("products", {
   category: { type: String, required: true },
   thumbnails: { type: String, required: false },
 });
+
+productSchema.plugin(mongoosePaginate);
+
+export const productManager = new ManagerMongoose("products", productSchema);

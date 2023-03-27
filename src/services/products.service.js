@@ -2,8 +2,15 @@ import { productManager } from "../dao/DB/productManager.js";
 
 class ProductsService {
   async addProduct(dataNewProduct) {
-    const productAdded = await productManager.save(dataNewProduct);
-    return productAdded;
+    const elements = await productsService.showProduct(
+      "code",
+      dataNewProduct.code
+    );
+    if (elements.length === 0) {
+      return await productManager.save(dataNewProduct);
+    } else {
+      return false;
+    }
   }
   async showProduct(filterKey, filterVal, max, sortKey, sortVal) {
     let queryFilter = {};
@@ -16,6 +23,11 @@ class ProductsService {
     );
     return products;
   }
+  async showPaginate(queryFilter = {}, page = 1, limit = 10, sort) {
+    let options = { limit: limit, page: page, sort: { price: sort } };
+    return await productManager.getPaginate(queryFilter, options);
+  }
+
   async deleteProduct(filterKey, filterVal) {
     let queryFilter = {};
     queryFilter[filterKey] = filterVal;
