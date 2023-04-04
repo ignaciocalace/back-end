@@ -1,45 +1,61 @@
 <div>
-  {{#if isValid}}
-    {{#if isProducts}}
-      <h3>Products</h3>
- 
-      {{#each productsToShow}}
-        <ul>
+    {{#if userData.email}}
 
-          <li>Title: {{title}}</li>
-          <li>Description: {{description}}</li>
-          <li>Code: {{code}}</li>
-          <li>Price: {{price}}</li>
-          <li>Status: {{status}}</li>
-          <li>Category: {{category}}</li>
-          <li>Stock: {{stock}}</li>
-          <li>Thumbnails: {{thumbnails}}</li>         
-          
-          <form >
-            <input required type="number" id="quantity" name="quantity" min="1" max="{{stock}}"><br><br>
-            <input type="hidden" id="idProduct" name="idProduct" value={{_id}}>
-             <input type="hidden" id="idCart" name="idCart" value={{idCart}}>
-            <button type="button" onclick="sendToCart(event)">Add to Cart</button>
+      <h2>Welcome {{userData.name}}</h2>
+      <p>Role: {{user.role}}</p>
+          <form action="/logout" method="get">
+            <button type="submit">Logout</button>
+          </form>
+           <form action="/profile" method="get">
+            <button type="submit">Profile</button>
           </form>
 
-        </ul>
-      {{/each}}
-      <div>
-        {{#if productsPaginate.hasPrevPage}}
-            <a href={{productsPaginate.prevLink}}><< Previous Page</a>
+      {{#if isValid}}
+        {{#if isProducts}}
+          <h3>Products</h3>
+          {{#each productsToShow}}
+            <ul>
+
+              <li>Title: {{title}}</li>
+              <li>Description: {{description}}</li>
+              <li>Code: {{code}}</li>
+              <li>Price: {{price}}</li>
+              <li>Status: {{status}}</li>
+              <li>Category: {{category}}</li>
+              <li>Stock: {{stock}}</li>
+              <li>Thumbnails: {{thumbnails}}</li>         
+              
+              <form >
+                <input required type="number" id="quantity" name="quantity" min="1" max="{{stock}}"><br><br>
+                <input type="hidden" id="idProduct" name="idProduct" value={{_id}}>
+                <input type="hidden" id="idCart" name="idCart" value={{idCart}}>
+                <button type="button" onclick="sendToCart(event)">Add to Cart</button>
+              </form>
+
+            </ul>
+          {{/each}}
+          <div>
+            {{#if productsPaginate.hasPrevPage}}
+                <a href={{productsPaginate.prevLink}}><< Previous Page</a>
+            {{/if}}
+            &nbsp;
+            {{productsPaginate.page}}
+            &nbsp;
+            {{#if productsPaginate.hasNextPage}}
+                <a href={{productsPaginate.nextLink}}>Next Page >></a>
+            {{/if}} 
+          </div>
+        {{else}}
+          <h3>No hay productos para mostrar</h3>
         {{/if}}
-        &nbsp;
-        {{productsPaginate.page}}
-        &nbsp;
-        {{#if productsPaginate.hasNextPage}}
-            <a href={{productsPaginate.nextLink}}>Next Page >></a>
-        {{/if}} 
-      </div>
-    {{else}}
-      <h3>No hay productos para mostrar</h3>
+      {{else}}
+        <h3>Invalid Page Number</h3>
+      {{/if}}
+  
+
+       {{else}}
+       <h2>You must login to see products</h2>
+       <a href="/login">Return to Login</a>
     {{/if}}
-  {{else}}
-    <h3>Invalid Page Number</h3>
-  {{/if}}
-</div>
+  </div>
 <script src="/js/productsCart.js"></script>

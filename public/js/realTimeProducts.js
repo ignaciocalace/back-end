@@ -25,7 +25,6 @@ document.getElementById("btnSubmit")?.addEventListener("click", () => {
 
   for (const input of inputs) {
     if (!(input instanceof HTMLInputElement)) {
-      console.log(input);
       if (input != inputThumbnails || input != inputStatus) {
         instanceOfInputs = false;
         break;

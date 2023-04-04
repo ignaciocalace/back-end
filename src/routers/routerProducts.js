@@ -54,12 +54,13 @@ routerProducts.get("/", async (req, res) => {
       thumbnails: e.thumbnails,
       idCart: idCart,
     }));
-
+    const userData = req.session.user;
     res.render("products", {
       isProducts,
       productsToShow,
       productsPaginate,
       isValid,
+      userData,
     });
   } catch (err) {
     res.status(400).json(err);
