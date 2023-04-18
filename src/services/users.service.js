@@ -9,6 +9,9 @@ class UsersService {
     return await userManager.get({ email: queryFilter });
   }
 
+  async findUserId(queryFilter) {
+    return await userManager.getOne({ _id: queryFilter });
+  }
   async findCredentials(emailQuery, passwordQuery) {
     return await userManager.get({
       email: emailQuery,

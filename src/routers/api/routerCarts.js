@@ -1,7 +1,7 @@
 import { json, Router } from "express";
-import { Cart } from "../dao/models/Cart.js";
-import { cartsService } from "../services/carts.service.js";
-import { productsService } from "../services/products.service.js";
+import { Cart } from "../../dao/models/Cart.js";
+import { cartsService } from "../../services/carts.service.js";
+import { productsService } from "../../services/products.service.js";
 
 const routerCarts = Router();
 

@@ -1,53 +1,46 @@
 import express from "express";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
-import session from "express-session";
-import MongoStore from "connect-mongo";
 import handlebars from "express-handlebars";
-import routerUsers from "./routers/routerUsers.js";
-import routerCarts from "./routers/routerCarts.js";
-import { routerChat } from "./routers/routerChat.js";
-import { MONGODB_CNX_STR } from "./config/mongodb.js";
-import routerProducts from "./routers/routerProducts.js";
-import { routerRealTime } from "./routers/routerRealTime.js";
 import { ProductsSocket } from "./sockets/products.socket.js";
 import { MessagesSocket } from "./sockets/messages.socket.js";
-import routersViewUsers from "./routers/routerViewsUsers.js";
+import cookieParser from "cookie-parser";
+import { passportInitialize } from "./middlewares/passport.js";
+import { webRouter } from "./routers/web/web.router.js";
+import { apiRouter } from "./routers/api/api.router.js";
+import dotenv from "dotenv";
+import session from "express-session";
+dotenv.config();
 
 const app = express();
 
-await mongoose.connect(MONGODB_CNX_STR);
+await mongoose.connect(process.env.MONGODB_CNX_STR);
 
 const port = 8080;
 const httpServer = app.listen(port, () => {
   console.log(`Conected to port ${port}`);
 });
 
+app.use(passportInitialize);
+
 app.use(
   session({
-    store: new MongoStore({ mongoUrl: MONGODB_CNX_STR, ttl: 3600 }),
-    secret: "theCatisUnderTheTable",
+    secret: process.env.PASSJWT,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
-
-// app.use(cookieParser);
-
 app.use(express.static("public"));
 app.use(express.json());
 
+app.use(cookieParser(process.env.COOKIESIGN));
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./views");
 app.set("view engine", "handlebars");
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", routersViewUsers);
-app.use("/api", routerUsers);
-app.use("/api/products", routerProducts);
-app.use("/api/carts", routerCarts);
-app.use("/realtimeproducts", routerRealTime);
-app.use("/chat", routerChat);
+app.use("/", webRouter);
+app.use("/api", apiRouter);
 
 app.get("/", async (req, res) => {
   res.render("home", {});

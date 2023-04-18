@@ -31,7 +31,7 @@ loginForm.addEventListener("submit", async (e) => {
       password: passwordUser.value,
     };
 
-    const url = "/api/sessions";
+    const url = "/api/login";
     const opt = {
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +40,6 @@ loginForm.addEventListener("submit", async (e) => {
       body: JSON.stringify(loginUser),
     };
     await send(url, opt);
-    window.location.href = "/";
   }
 });
 
@@ -48,9 +47,19 @@ async function send(url, opt) {
   await fetch(url, opt)
     .then((res) => {
       console.log(res.status);
-      console.log(res);
+      if (res.status === 500) {
+        alertPass("Wrong Credentials");
+      } else if (res.status === 200) {
+        window.location.href = "/";
+      }
     })
     .catch((err) => {
       console.error(err);
     });
+}
+
+function alertPass(msj) {
+  const span = document.createElement("span");
+  span.textContent = msj;
+  loginForm.appendChild(span);
 }

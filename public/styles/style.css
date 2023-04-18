@@ -1,0 +1,85 @@
+h1 {
+    font-size: 36px;
+    text-align: center;
+}
+
+.container {
+    margin: 5%
+}
+
+form {
+    margin: 1%;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    display: flex;
+    width: auto;
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #3e8e41;
+}
+
+input[type="number"] {
+    width: 25%;
+}
+
+div {
+    margin: auto;
+    text-align: left;
+    margin-top: 16px;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+p {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.green-btn {
+    background-color: #4CAF50
+}
+
+.red-btn {
+    background-color: rgb(148, 0, 0);
+}
+
+.nav-btn form {
+    display: block;
+    border: 0px
+}

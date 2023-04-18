@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { Product } from "../dao/models/Product.js";
-import { cartsService } from "../services/carts.service.js";
-import { productsService } from "../services/products.service.js";
+import { Product } from "../../dao/models/Product.js";
+import { cartsService } from "../../services/carts.service.js";
+import { productsService } from "../../services/products.service.js";
+import { isAuthenticated } from "../../middlewares/authToken.js";
 const routerProducts = Router();
 
-routerProducts.get("/", async (req, res) => {
+routerProducts.get("/", isAuthenticated, async (req, res) => {
   try {
     let query = req.query.query;
     let limit = req.query.limit;
@@ -54,7 +55,7 @@ routerProducts.get("/", async (req, res) => {
       thumbnails: e.thumbnails,
       idCart: idCart,
     }));
-    const userData = req.session.user;
+    const userData = req["user"];
     res.render("products", {
       isProducts,
       productsToShow,

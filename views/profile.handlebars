@@ -1,12 +1,17 @@
 <h1>Your Profile</h1>
-<p>Nanme: {{user.name}}</p>
-<p>Email: {{user.email}}</p>
-<p>Age: {{user.age}}</p>
-<p>Role: {{user.role}}</p>
-
-<form action="/logout" method="get">
-  <button type="submit">Logout</button>
-</form>
-<form action="/api/products" method="get">
-  <button type="submit">Products</button>
-</form>
+<div>
+  <p>Name: {{user.name}}</p>
+  <p>Email: {{user.email}}</p>
+  {{#if user.age}}
+    <p>Age: {{user.age}}</p>
+  {{/if}}
+  <p>Role: {{user.role}}</p>
+</div>
+<div class="nav-btn">
+  <form action="/api/products" method="get">
+    <button class="green-btn" type="submit">Products</button>
+  </form>
+  <form action="/logout" method="get">
+    <button class="red-btn" type="submit">Logout</button>
+  </form>
+</div>

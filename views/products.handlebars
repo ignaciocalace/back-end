@@ -1,14 +1,17 @@
-<div>
+<div >
     {{#if userData.email}}
 
       <h2>Welcome {{userData.name}}</h2>
-      <p>Role: {{user.role}}</p>
-          <form action="/logout" method="get">
-            <button type="submit">Logout</button>
+      <p>Role: {{userData.role}}</p>
+        <div class="nav-btn">
+          <form action="/profile" method="get">
+            <button class="green-btn" type="submit">Profile</button>
+          </form>  
+          <form action="/logout"  method="get">
+            <button class="red-btn"type="submit">Logout</button>
           </form>
-           <form action="/profile" method="get">
-            <button type="submit">Profile</button>
-          </form>
+        </div>
+          
 
       {{#if isValid}}
         {{#if isProducts}}

@@ -15,7 +15,6 @@ registerForm.addEventListener("submit", async (e) => {
     ageUser,
     passwordUser,
     passwordCheckUser,
- 
   ];
   let instanceOfInputs = true;
   let valueInputs = true;
@@ -48,7 +47,7 @@ registerForm.addEventListener("submit", async (e) => {
       role: "user",
     };
 
-    const url = "/api/users";
+    const url = "/api/register";
     const opt = {
       headers: {
         "Content-Type": "application/json",
@@ -57,22 +56,23 @@ registerForm.addEventListener("submit", async (e) => {
       body: JSON.stringify(newUser),
     };
     await send(url, opt);
-    send("/", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    });
+  } else if (passwordUser.value != passwordCheckUser.value) {
+    alert("Passwords do not match");
   }
 });
 
 async function send(url, opt) {
-  await fetch(url, opt)
-    .then((res) => {
-      console.log(res.status);
-      console.log(res);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  await fetch(url, opt).then((res) => {
+    if (res.status === 422) {
+      alertPass("User alredy registred");
+    } else {
+      location.replace("/profile");
+    }
+  });
+}
+
+function alertPass(msj) {
+  const span = document.createElement("span");
+  span.textContent = msj;
+  registerForm.appendChild(span);
 }
