@@ -6,6 +6,8 @@ import { comparePass, hashPass } from "../utils/crypt.js";
 import { AuthenticationError } from "../errors/AuthenticationError.js";
 import dotenv from "dotenv";
 import passportJwt from "passport-jwt";
+import { cartsService } from "../services/carts.service.js";
+import { Cart } from "../dao/models/Cart.js";
 
 dotenv.config();
 
@@ -26,7 +28,6 @@ passport.use(
       jwtFromRequest: cookieExtractor,
       secretOrKey: process.env.PASSJWT,
     },
-
     function (jwtPayload, done) {
       done(null, jwtPayload);
     }
@@ -49,6 +50,9 @@ passport.use(
             .status(422)
             .json({ status: "error", error: "User already exists" });
         req.body["password"] = hashPass(req.body["password"]);
+        const createCart = new Cart();
+        const newCart = await cartsService.createCart(createCart);
+        req.body["cart"] = newCart._id.valueOf();
         const newUser = await usersService.addUser(req.body);
         done(null, newUser);
       } catch (error) {
@@ -88,10 +92,12 @@ passport.use(
       callbackURL: process.env.CBURLGITHUB,
     },
     async (accessToken, refreshToken, profile, done) => {
-      const { email, login, name, nodeId } = profile["_json"];
+      const { email, login, name } = profile["_json"];
       const newEmail = email ? email : login;
       const { firstName, lastName } = splitName(name);
       let user = await usersService.findUser(newEmail || login);
+      const createCart = new Cart();
+      const newCart = await cartsService.createCart(createCart);
       user = user[0];
       if (!user) {
         user = {
@@ -100,6 +106,7 @@ passport.use(
           password: "",
           email: newEmail,
           age: undefined,
+          cart: newCart._id.valueOf(),
           role: "user",
         };
         await usersService.addUser(user);

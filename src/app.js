@@ -10,8 +10,9 @@ import { webRouter } from "./routers/web/web.router.js";
 import { apiRouter } from "./routers/api/api.router.js";
 import dotenv from "dotenv";
 import session from "express-session";
-dotenv.config();
 
+
+dotenv.config();
 const app = express();
 
 await mongoose.connect(process.env.MONGODB_CNX_STR);
@@ -41,10 +42,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", webRouter);
 app.use("/api", apiRouter);
-
-app.get("/", async (req, res) => {
-  res.render("home", {});
-});
 
 const io = new Server(httpServer);
 
