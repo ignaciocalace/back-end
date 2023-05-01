@@ -1,21 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
-import handlebars from "express-handlebars";
-import { ProductsSocket } from "./sockets/products.socket.js";
-import { MessagesSocket } from "./sockets/messages.socket.js";
+import session from "express-session";
 import cookieParser from "cookie-parser";
-import { passportInitialize } from "./middlewares/passport.js";
+import handlebars from "express-handlebars";
 import { webRouter } from "./routers/web/web.router.js";
 import { apiRouter } from "./routers/api/api.router.js";
-import dotenv from "dotenv";
-import session from "express-session";
+import { ProductsSocket } from "./sockets/products.socket.js";
+import { MessagesSocket } from "./sockets/messages.socket.js";
+import { passportInitialize } from "./middlewares/passport.js";
+import { COOKIESIGN, MONGODB_CNX_STR, PASSJWT } from "./config/passwords.js";
 
-
-dotenv.config();
 const app = express();
 
-await mongoose.connect(process.env.MONGODB_CNX_STR);
+await mongoose.connect(MONGODB_CNX_STR);
 
 const port = 8080;
 const httpServer = app.listen(port, () => {
@@ -26,7 +24,7 @@ app.use(passportInitialize);
 
 app.use(
   session({
-    secret: process.env.PASSJWT,
+    secret: PASSJWT,
     resave: false,
     saveUninitialized: false,
   })
@@ -34,7 +32,7 @@ app.use(
 app.use(express.static("public"));
 app.use(express.json());
 
-app.use(cookieParser(process.env.COOKIESIGN));
+app.use(cookieParser(COOKIESIGN));
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./views");
 app.set("view engine", "handlebars");

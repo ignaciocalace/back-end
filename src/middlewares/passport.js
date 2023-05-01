@@ -8,6 +8,12 @@ import dotenv from "dotenv";
 import passportJwt from "passport-jwt";
 import { cartsService } from "../services/carts.service.js";
 import { Cart } from "../dao/models/Cart.js";
+import {
+  CBURLGITHUB,
+  CLIENTIDGITHUB,
+  CLIENTSECRETGITHUB,
+  PASSJWT,
+} from "../config/passwords.js";
 
 dotenv.config();
 
@@ -26,7 +32,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: process.env.PASSJWT,
+      secretOrKey: PASSJWT,
     },
     function (jwtPayload, done) {
       done(null, jwtPayload);
@@ -87,9 +93,9 @@ passport.use(
   "github",
   new GithubStrategy(
     {
-      clientID: process.env.CLIENTIDGITHUB,
-      clientSecret: process.env.CLIENTSECRETGITHUB,
-      callbackURL: process.env.CBURLGITHUB,
+      clientID: CLIENTIDGITHUB,
+      clientSecret: CLIENTSECRETGITHUB,
+      callbackURL: CBURLGITHUB,
     },
     async (accessToken, refreshToken, profile, done) => {
       const { email, login, name } = profile["_json"];

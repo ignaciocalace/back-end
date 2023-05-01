@@ -1,7 +1,5 @@
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { PASSJWT } from "../../config/passwords.js";
 
 export function loginController(req, res, next) {
   const payload = {
@@ -12,7 +10,7 @@ export function loginController(req, res, next) {
     role: req.user.role,
   };
   const options = { expiresIn: "1d" };
-  const token = jwt.sign(payload, process.env.PASSJWT, options);
+  const token = jwt.sign(payload, PASSJWT, options);
   res.cookie("user", token, { signed: true, httpOnly: true });
   res.redirect("/");
 }
