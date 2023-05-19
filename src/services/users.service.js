@@ -1,22 +1,19 @@
-import { userManager } from "../dao/DB/userManager.js";
+import { usersRepository } from "../repository/users.repository.js";
 
 class UsersService {
   async addUser(dataNewUser) {
-    return await userManager.save(dataNewUser);
+    return await usersRepository.addUser(dataNewUser);
   }
 
   async findUser(queryFilter) {
-    return await userManager.get({ email: queryFilter });
+    return await usersRepository.findUser(queryFilter);
   }
 
   async findUserId(queryFilter) {
-    return await userManager.getOne({ _id: queryFilter });
+    return await usersRepository.findUserId(queryFilter);
   }
-  async findCredentials(emailQuery, passwordQuery) {
-    return await userManager.get({
-      email: emailQuery,
-      password: passwordQuery,
-    });
+  async findCredentials(emailQuery) {
+    return await usersRepository.findCredentials(emailQuery);
   }
 }
 export const usersService = new UsersService();

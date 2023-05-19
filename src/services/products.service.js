@@ -1,43 +1,33 @@
-import { productManager } from "../dao/DB/productManager.js";
+import { productsRepository } from "../repository/products.repository.js";
 
 class ProductsService {
   async addProduct(dataNewProduct) {
-    const elements = await productsService.showProduct(
-      "code",
-      dataNewProduct.code
-    );
-    if (elements.length === 0) {
-      return await productManager.save(dataNewProduct);
-    } else {
-      return false;
-    }
+    return await productsRepository.addProduct(dataNewProduct);
   }
+
   async showProduct(filterKey, filterVal, max, sortKey, sortVal) {
-    let queryFilter = {};
-    queryFilter[filterKey] = filterVal;
-    const products = await productManager.get(
-      queryFilter,
+    return await productsRepository.showProduct(
+      filterKey,
+      filterVal,
       max,
       sortKey,
       sortVal
     );
-    return products;
   }
   async showPaginate(queryFilter = {}, page = 1, limit = 10, sort) {
-    let options = { limit: limit, page: page, sort: { price: sort } };
-    return await productManager.getPaginate(queryFilter, options);
+    return await productsRepository.showPaginate(
+      queryFilter,
+      page,
+      limit,
+      sort
+    );
   }
 
   async deleteProduct(filterKey, filterVal) {
-    let queryFilter = {};
-    queryFilter[filterKey] = filterVal;
-    return await productManager.delete(queryFilter);
+    return await productsRepository.deleteProduct(filterKey, filterVal);
   }
   async updateProduct(filterKey, filterVal, newProduct) {
-    let queryFilter = {};
-    queryFilter[filterKey] = filterVal;
-    const updateProduct = await productManager.update(queryFilter, newProduct);
-    return updateProduct;
+    return productsRepository.updateProduct(filterKey, filterVal, newProduct);
   }
 }
 

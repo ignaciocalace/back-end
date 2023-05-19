@@ -1,16 +1,11 @@
 import jwt from "jsonwebtoken";
 import { PASSJWT } from "../../config/passwords.js";
+import UserDTO from "../../dao/models/userDTO.js";
 
 export function loginController(req, res, next) {
-  const payload = {
-    id: req.user._id,
-    name: req.user.first_name + " " + req.user.last_name,
-    email: req.user.email,
-    age: req.user.age,
-    role: req.user.role,
-  };
+  const user = new UserDTO(req.user);
   const options = { expiresIn: "1d" };
-  const token = jwt.sign(payload, PASSJWT, options);
+  const token = jwt.sign(user.returnUser(), PASSJWT, options);
   res.cookie("user", token, { signed: true, httpOnly: true });
   res.redirect("/");
 }

@@ -9,33 +9,58 @@ export class ManagerMongoose {
   }
 
   async save(register) {
-    return this.collection.create(register);
+    try {
+      return await this.collection.create(register);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async get(queryFilter, max = 10, sortKey = "_id", sortVal = -1) {
-    let querySort = {};
-    querySort[sortKey] = sortVal;
-    return await this.collection
-      .find(queryFilter)
-      .limit(max)
-      .sort(querySort)
-      .lean();
+    try {
+      let querySort = {};
+      querySort[sortKey] = sortVal;
+      return await this.collection
+        .find(queryFilter)
+        .limit(max)
+        .sort(querySort)
+        .lean();
+    } catch (error) {
+      console.log(error);
+    }
   }
+
   async getOne(queryFilter = {}) {
-    return await this.collection.findOne(queryFilter);
+    try {
+      return await this.collection.findOne(queryFilter);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getPaginate(queryFilter, options) {
-    return await this.collection.paginate(queryFilter, options);
+    try {
+      return await this.collection.paginate(queryFilter, options);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async update(queryFilter, newData) {
-    return await this.collection.updateOne(queryFilter, newData, {
-      multi: true,
-    });
+    try {
+      return await this.collection.updateOne(queryFilter, newData, {
+        multi: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async delete(queryFilter) {
-    return await this.collection.deleteMany(queryFilter);
+    try {
+      return await this.collection.deleteMany(queryFilter);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -4,7 +4,6 @@ import { Strategy as GithubStrategy } from "passport-github2";
 import { usersService } from "../services/users.service.js";
 import { comparePass, hashPass } from "../utils/crypt.js";
 import { AuthenticationError } from "../errors/AuthenticationError.js";
-import dotenv from "dotenv";
 import passportJwt from "passport-jwt";
 import { cartsService } from "../services/carts.service.js";
 import { Cart } from "../dao/models/Cart.js";
@@ -14,8 +13,6 @@ import {
   CLIENTSECRETGITHUB,
   PASSJWT,
 } from "../config/passwords.js";
-
-dotenv.config();
 
 const JWTStrategy = passportJwt.Strategy;
 
@@ -77,14 +74,13 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, username, password, done) => {
-      const userDB = await usersService.findUser(req.body.email);
-      const user = userDB[0];
-      if (!user) return done(new AuthenticationError());
-      if (!comparePass(req.body.password, user.password))
+      const userDB = await usersService.findCredentials(req.body.email);
+      if (!userDB) return done(new AuthenticationError());
+      if (!comparePass(req.body.password, userDB.password))
         return done(new AuthenticationError());
-      delete user.password;
+      delete userDB.password;
       delete req.body.password;
-      done(null, user);
+      done(null, userDB);
     }
   )
 );
@@ -101,12 +97,10 @@ passport.use(
       const { email, login, name } = profile["_json"];
       const newEmail = email ? email : login;
       const { firstName, lastName } = splitName(name);
-      let user = await usersService.findUser(newEmail || login);
-      const createCart = new Cart();
-      const newCart = await cartsService.createCart(createCart);
-      user = user[0];
-      if (!user) {
-        user = {
+      let userDB = await usersService.findUser(newEmail || login);
+      if (!userDB) {
+        const newCart = await cartsService.createCart(new Cart());
+        userDB = {
           first_name: firstName,
           last_name: lastName,
           password: "",
@@ -115,10 +109,9 @@ passport.use(
           cart: newCart._id.valueOf(),
           role: "user",
         };
-        await usersService.addUser(user);
+        await usersService.addUser(userDB);
       }
-      delete user.password;
-      done(null, user);
+      done(null, userDB);
     }
   )
 );

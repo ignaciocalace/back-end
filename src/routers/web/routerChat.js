@@ -1,7 +1,7 @@
 import { Router } from "express";
+import { isUser } from "../../middlewares/authToken.js";
+import { renderChat } from "../../controllers/web/chatController.js";
 
 export const routerChat = Router();
 
-routerChat.get("/", (req, res) => {
-  res.render("chat", { title: "Chat" });
-});
+routerChat.get("/", isUser, renderChat);

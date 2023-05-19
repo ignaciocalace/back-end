@@ -1,23 +1,29 @@
 <div>
   {{#if isProducts}}
     <h3>Your Cart</h3>
+    <div class="nav-btn">
+      <form action="/profile" method="get">
+        <button class="red-btn" type="submit">Profile</button>
+      </form>
+      <form action="/api/products" method="get">
+        <button class="brown-btn" type="submit">Products</button>
+      </form>
+    </div>
     {{#each cartToShow}}
       <ul>
-
         <li>Title: {{title}}</li>
-        <li>Description: {{description}}</li>
-        <li>Code: {{code}}</li>
         <li>Price: {{price}}</li>
-        <li>Status: {{status}}</li>
-        <li>Category: {{category}}</li>
-        <li>Stock: {{stock}}</li>
-        <li>Thumbnails: {{thumbnails}}</li>
         <li>Quantity: {{quantity}}</li>
-
       </ul>
     {{/each}}
+    <div class="nav-btn">
 
+      <form action="/api/carts/{{cid}}/purchase" method="get">
+        <button class="green-btn" type="submit">Purchase</button>
+      </form>
+
+    </div>
   {{else}}
-    <h3>No products on your cart</h3>
+    <h3>No products in your cart</h3>
   {{/if}}
 </div>

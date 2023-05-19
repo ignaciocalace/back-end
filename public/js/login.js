@@ -46,7 +46,6 @@ loginForm.addEventListener("submit", async (e) => {
 async function send(url, opt) {
   await fetch(url, opt)
     .then((res) => {
-      console.log(res.status);
       if (res.status === 500) {
         alertPass("Wrong Credentials");
       } else if (res.status === 200) {
