@@ -1,4 +1,6 @@
 import { Product } from "../../dao/models/Product.js";
+import { errors } from "../../errors/errors.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
 import { productsService } from "../../services/products.service.js";
 
 export async function handleGetAllProducts(req, res) {
@@ -34,7 +36,7 @@ export async function handleGetAllProducts(req, res) {
     if (productsPaginate.docs.length > 0) {
       res.status(200);
     } else {
-      res.status(404);
+      new errorHandler(errors.NOT_FOUND, req, req.res);
     }
     const isProducts = productsPaginate.docs.length > 0;
     let productsToShow = productsPaginate.docs.map((e) => ({
@@ -57,7 +59,7 @@ export async function handleGetAllProducts(req, res) {
       userData,
     });
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.INVALID_ARG, req, req.res);
   }
 }
 export async function handleGetProduct(req, res) {
@@ -66,9 +68,9 @@ export async function handleGetProduct(req, res) {
     let showProductId = await productsService.showProduct("_id", pid);
     showProductId
       ? res.status(200).json(showProductId)
-      : res.status(404).json("This product id do not exist");
+      : new errorHandler(errors.NOT_FOUND, req, req.res);
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.INVALID_ARG, req, req.res);
   }
 }
 export async function handlePostProduct(req, res) {
@@ -80,10 +82,9 @@ export async function handlePostProduct(req, res) {
       res.status(201).json("Product added successfully");
     } else {
       res.status(200).json("Code product alredy added");
-      throw new Error("Code product alredy added");
     }
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.INVALID_ARG, req, req.res);
   }
 }
 export async function handlePutProduct(req, res) {
@@ -97,9 +98,9 @@ export async function handlePutProduct(req, res) {
     );
     updatedProduct.matchedCount = 1
       ? res.status(201).json("Product updated successfully")
-      : res.status(200).json("Id product do not exist");
+      : new errorHandler(errors.NOT_FOUND, req, req.res);
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.INVALID_ARG, req, req.res);
   }
 }
 export async function handleDeleteProduct(req, res) {
@@ -108,8 +109,8 @@ export async function handleDeleteProduct(req, res) {
     const deleteElement = await productsService.deleteProduct("_id", pid);
     deleteElement.deletedCount === 1
       ? res.status(200).json("Product deleted successfully")
-      : res.status(404).json("Id product do not exist");
+      : new errorHandler(errors.NOT_FOUND, req, req.res);
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.INVALID_ARG, req, req.res);
   }
 }

@@ -1,3 +1,4 @@
+import { errors } from "../../errors/errors.js";
 import { generateProduct } from "../../mocks/mockProducts.js";
 
 export default function generateProductMock(req, res) {
@@ -9,6 +10,6 @@ export default function generateProductMock(req, res) {
     }
     return res.status(200).json(products);
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.NOT_FOUND, req, req.res);
   }
 }

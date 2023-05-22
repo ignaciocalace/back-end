@@ -1,12 +1,14 @@
 import passport from "passport";
+import { errorHandler } from "./errorsHandler.js";
+import { errors } from "../errors/errors.js";
 
 const authenticate = (req, res, next, role) => {
   passport.authenticate("verifyTokenAuth", (err, user) => {
     if (!user) {
-      return res.status(401).redirect("/login");
+      return new errorHandler(errors.NOT_LOGGED_IN, req, res);
     }
     if (role && user.role !== role) {
-      return res.status(401).redirect("/profile");
+      return new errorHandler(errors.NOT_LOGGED_IN, req, res);
     }
     req.user = user;
     next();

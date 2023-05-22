@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { errors } from "../../errors/errors.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
 
 export class ManagerMongoose {
   constructor(nameCollection, schema) {
@@ -11,8 +13,8 @@ export class ManagerMongoose {
   async save(register) {
     try {
       return await this.collection.create(register);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      new errorHandler(errors.DATABASE_ERROR, req, req.res);
     }
   }
 
@@ -25,24 +27,24 @@ export class ManagerMongoose {
         .limit(max)
         .sort(querySort)
         .lean();
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      new errorHandler(errors.DATABASE_ERROR, req, req.res);
     }
   }
 
   async getOne(queryFilter = {}) {
     try {
       return await this.collection.findOne(queryFilter);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      new errorHandler(errors.DATABASE_ERROR, req, req.res);
     }
   }
 
   async getPaginate(queryFilter, options) {
     try {
       return await this.collection.paginate(queryFilter, options);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      new errorHandler(errors.DATABASE_ERROR, req, req.res);
     }
   }
 
@@ -51,16 +53,16 @@ export class ManagerMongoose {
       return await this.collection.updateOne(queryFilter, newData, {
         multi: true,
       });
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      new errorHandler(errors.DATABASE_ERROR, req, req.res);
     }
   }
 
   async delete(queryFilter) {
     try {
       return await this.collection.deleteMany(queryFilter);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      new errorHandler(errors.DATABASE_ERROR, req, req.res);
     }
   }
 }

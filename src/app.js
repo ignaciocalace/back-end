@@ -10,6 +10,7 @@ import { ProductsSocket } from "./sockets/products.socket.js";
 import { MessagesSocket } from "./sockets/messages.socket.js";
 import { passportInitialize } from "./middlewares/passport.js";
 import { COOKIESIGN, MONGODB_CNX_STR, PASSJWT } from "./config/passwords.js";
+import { errorHandler } from "./middlewares/errorsHandler.js";
 
 const app = express();
 

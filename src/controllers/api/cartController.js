@@ -1,4 +1,6 @@
 import { Cart } from "../../dao/models/Cart.js";
+import { errors } from "../../errors/errors.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
 import { cartsService } from "../../services/carts.service.js";
 import { productsService } from "../../services/products.service.js";
 import { ticketsService } from "../../services/tickets.service.js";
@@ -11,7 +13,7 @@ export async function handlePostCart(req, res) {
       .status(201)
       .json(`Cart created successfully with id: ${newCart._id.valueOf()}`);
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 export async function handleGetCart(req, res) {
@@ -38,7 +40,7 @@ export async function handleGetCart(req, res) {
       cid,
     });
   } catch (err) {
-    res.status(404).json("This cart id do not exist");
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 
@@ -56,10 +58,10 @@ export async function handleGetPurchase(req, res) {
       const newOrder = await ticketsService.newTicket(req.user.email, toTicket);
       res.status(201).json(newOrder);
     } else {
-      res.status(404).json("No items on the cart or out of stock");
+      new errorHandler(errors.NOT_FOUND, req, res);
     }
   } catch (err) {
-    res.status(404).json("This cart id does not exist");
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 
@@ -88,16 +90,16 @@ export async function handlePutProdCart(req, res) {
       newProduct = await cartsService.addToCart(cid, pid, quantity);
       res.status(200).json("Product added to cart");
     } else if (productToAdd.length === 0) {
-      res.status(400).json("This id product do not exist.");
+      new errorHandler(errors.NOT_FOUND, req, res);
     } else if (cartToAdd.length === 0) {
-      res.status(400).json("This id cart do not exist.");
+      new errorHandler(errors.NOT_FOUND, req, res);
     } else if (quantity === "") {
-      res.status(400).json("You need to add a quantity");
+      new errorHandler(errors.INVALID_ARG, req, res);
     } else {
-      res.status(400).json("You entered an invalid id.");
+      new errorHandler(errors.INVALID_ARG, req, res);
     }
   } catch (err) {
-    res.status(400).json(err);
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 export async function handlePutCart(req, res) {
@@ -108,12 +110,12 @@ export async function handlePutCart(req, res) {
       let cart = await cartsService.updateCart(cid, toUpdate);
       if (cart.modifiedCount != 0) {
         res.status(200).json("Cart updated");
-      } else res.status(400).json("This cart id do not exist");
+      } else new errorHandler(errors.NOT_FOUND, req, res);
     } else {
-      res.status(400).json("You need a object to update");
+      new errorHandler(errors.INVALID_ARG, req, res);
     }
   } catch (err) {
-    res.status(404).json(err);
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 export async function handleDeleteProdCart(req, res) {
@@ -135,10 +137,10 @@ export async function handleDeleteProdCart(req, res) {
         .status(200)
         .json(`Product with id: ${pid} was deleted from cart with id: ${cid}`);
     } else {
-      res.status(404).json("The cart with this product do not exist");
+      new errorHandler(errors.NOT_FOUND, req, res);
     }
   } catch (err) {
-    res.status(404).json("The cart with this product do not exist");
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 export async function handleDeleteCart(req, res) {
@@ -147,6 +149,6 @@ export async function handleDeleteCart(req, res) {
     await cartsService.updateCart(cid, []);
     res.status(200).json("Products Deleted");
   } catch (err) {
-    res.status(404).json("This cart id do not exist");
+    new errorHandler(errors.NOT_FOUND, req, res);
   }
 }
