@@ -10,3 +10,4 @@ export const COOKIESIGN = process.env.COOKIESIGN;
 export const CLIENTIDGITHUB = process.env.CLIENTIDGITHUB;
 export const CLIENTSECRETGITHUB = process.env.CLIENTSECRETGITHUB;
 export const CBURLGITHUB = process.env.CBURLGITHUB;
+export const NODE_ENV = process.env.NODE_ENV;

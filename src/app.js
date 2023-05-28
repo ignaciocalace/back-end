@@ -10,7 +10,7 @@ import { ProductsSocket } from "./sockets/products.socket.js";
 import { MessagesSocket } from "./sockets/messages.socket.js";
 import { passportInitialize } from "./middlewares/passport.js";
 import { COOKIESIGN, MONGODB_CNX_STR, PASSJWT } from "./config/passwords.js";
-import { errorHandler } from "./middlewares/errorsHandler.js";
+import { logger, winstonLogger } from "./middlewares/logger.js";
 
 const app = express();
 
@@ -18,11 +18,11 @@ await mongoose.connect(MONGODB_CNX_STR);
 
 const port = 8080;
 const httpServer = app.listen(port, () => {
-  console.log(`Conected to port ${port}`);
+  winstonLogger.info(`Conected to port ${port}`);
 });
 
 app.use(passportInitialize);
-
+app.use(logger);
 app.use(
   session({
     secret: PASSJWT,
