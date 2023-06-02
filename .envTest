@@ -5,3 +5,5 @@ CLIENTIDGITHUB=Iv1.64c43a55ed2fb8af
 CLIENTSECRETGITHUB=f601e15c5675755b7c971ab5e4b10970ab8d41a6
 CBURLGITHUB=http://localhost:8080/api/githubcallback
 NODE_ENV=production
+EMAIL_USER=nachoc1994uru@gmail.com
+EMAIL_PASS=zqxfsujcrewnlbvc
