@@ -75,13 +75,17 @@ export async function handleGetProduct(req, res) {
 }
 export async function handlePostProduct(req, res) {
   try {
-    const dataProduct = req.body;
-    const newProduct = new Product(dataProduct);
-    await productsService.addProduct(newProduct);
-    if (productsService) {
-      res.status(201).json("Product added successfully");
-    } else {
-      res.status(200).json("Code product alredy added");
+    if (req["user"]["role"] === "premium" || req["user"]["role"] === "admin") {
+      req.body["owner"] =
+        req["user"]["role"] === "premium" ? req["user"]["email"] : "admin";
+      const dataProduct = req.body;
+      const newProduct = new Product(dataProduct);
+      const newProductAdded = await productsService.addProduct(newProduct);
+      if (newProductAdded) {
+        res.status(201).json("Product added successfully");
+      } else {
+        res.status(200).json("Product already added");
+      }
     }
   } catch (err) {
     new errorHandler(errors.INVALID_ARG, req, req.res);
@@ -106,7 +110,15 @@ export async function handlePutProduct(req, res) {
 export async function handleDeleteProduct(req, res) {
   try {
     const pid = req.params.pid;
-    const deleteElement = await productsService.deleteProduct("_id", pid);
+    let deleteElement;
+    if (req["user"]["role"] === "admin") {
+      deleteElement = await productsService.deleteProduct("_id", pid);
+    } else if (req["user"]["role"] === "premium") {
+      let ProductToDelete = await productsService.showProduct("_id", pid);
+      if (ProductToDelete.owner === req["user"]["email"]) {
+        deleteElement = await productsService.deleteProduct("_id", pid);
+      }
+    }
     deleteElement.deletedCount === 1
       ? res.status(200).json("Product deleted successfully")
       : new errorHandler(errors.NOT_FOUND, req, req.res);

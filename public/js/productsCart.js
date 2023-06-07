@@ -18,12 +18,17 @@ async function sendToCart(event) {
 }
 
 async function send(url, opt) {
-  await fetch(url, opt)
-    .then((res) => {
-      console.log(res.status);
-      console.log(res);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  await fetch(url, opt).then((res) => {
+    if (res.status === 201) {
+      alert("Quantity updated");
+    } else if (res.status === 200) {
+      alert("Product added to the cart");
+    } else {
+      alert("Invalid Operation");
+    }
+  });
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  formProd = document.querySelector("form");
+});

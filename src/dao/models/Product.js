@@ -68,6 +68,10 @@ function validateThumbnails(value) {
   isTypeOf(value, "string");
   return value;
 }
+function validateOwner(value) {
+  isTypeOf(value, "string");
+  return value;
+}
 
 export class Product {
   constructor({
@@ -79,6 +83,7 @@ export class Product {
     stock,
     category,
     thumbnails,
+    owner = "admin",
   }) {
     this.title = validateTitle(title);
     this.description = validateDescription(description);
@@ -88,5 +93,6 @@ export class Product {
     this.stock = validateStock(stock);
     this.category = validateCategory(category);
     this.thumbnails = validateThumbnails(thumbnails);
+    this.owner = validateOwner(owner);
   }
 }

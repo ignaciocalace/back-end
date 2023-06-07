@@ -14,10 +14,10 @@ routerProducts.get("/", isAuthenticated, handleGetAllProducts);
 
 routerProducts.get("/:pid", isAuthenticated, handleGetProduct);
 
-routerProducts.post("/", isAdmin, handlePostProduct);
+routerProducts.post("/", isAuthenticated, handlePostProduct);
 
 routerProducts.put("/:pid", isAdmin, handlePutProduct);
 
-routerProducts.delete("/:pid", isAdmin, handleDeleteProduct);
+routerProducts.delete("/:pid", isAuthenticated, handleDeleteProduct);
 
 export default routerProducts;

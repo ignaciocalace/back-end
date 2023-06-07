@@ -28,5 +28,11 @@ class UsersRepository {
     });
     return userDB[0];
   }
+  async updateUser(filterKey, filterVal, newUser) {
+    let queryFilter = {};
+    queryFilter[filterKey] = filterVal;
+    const updateUser = await this.usersDao.update(queryFilter, newUser);
+    return updateUser;
+  }
 }
 export const usersRepository = new UsersRepository(userManager);

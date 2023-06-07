@@ -1,21 +1,12 @@
-registerForm = document.getElementById("registerForm");
+form = document.getElementById("Form");
 
-registerForm.addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const nameUser = document.getElementById("name");
-  const surnameUser = document.getElementById("surname");
-  const emailUser = document.getElementById("email");
-  const ageUser = document.getElementById("age");
+  const path = window.location.pathname;
+  const tokenPass = path.substring(path.lastIndexOf("/") + 1);
   const passwordUser = document.getElementById("password");
   const passwordCheckUser = document.getElementById("passwordCheck");
-  const inputs = [
-    nameUser,
-    surnameUser,
-    emailUser,
-    ageUser,
-    passwordUser,
-    passwordCheckUser,
-  ];
+  const inputs = [passwordUser, passwordCheckUser];
   let instanceOfInputs = true;
   let valueInputs = true;
 
@@ -39,34 +30,30 @@ registerForm.addEventListener("submit", async (e) => {
     passwordUser.value === passwordCheckUser.value
   ) {
     const newUser = {
-      first_name: nameUser.value,
-      last_name: surnameUser.value,
-      email: emailUser.value,
-      age: ageUser.value,
+      token: tokenPass,
       password: passwordUser.value,
-      role: "user",
     };
 
-    const url = "/api/register";
+    const url = "/api/users/updatePass";
     const opt = {
       headers: {
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(newUser),
     };
     await send(url, opt);
   } else if (passwordUser.value != passwordCheckUser.value) {
-    alert("Passwords do not match");
+    alertPass("Passwords do not match");
   }
 });
 
 async function send(url, opt) {
   await fetch(url, opt).then((res) => {
-    if (res.status === 422) {
-      alertPass("User alredy registred");
-    } else {
-      location.replace("/profile");
+    if (res.status === 400) {
+      alertPass("The password cannot be the currently used");
+    } else if (res.status === 201) {
+      alertPass("Password changed");
     }
   });
 }

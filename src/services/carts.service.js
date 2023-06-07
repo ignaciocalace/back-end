@@ -1,4 +1,3 @@
-import { cartManager } from "../dao/DB/cartManager.js";
 import { cartsRepository } from "../repository/carts.repository.js";
 
 class CartsService {

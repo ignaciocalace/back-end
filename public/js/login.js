@@ -60,5 +60,6 @@ async function send(url, opt) {
 function alertPass(msj) {
   const span = document.createElement("span");
   span.textContent = msj;
-  loginForm.appendChild(span);
+  const existingSpan = form.querySelector("span");
+  existingSpan ? form.replaceChild(span, existingSpan) : form.appendChild(span);
 }

@@ -58,7 +58,7 @@ passport.use(
         const newUser = await usersService.addUser(req.body);
         done(null, newUser);
       } catch (err) {
-        done(new errorHandler(errors.undefined, req, req.res));
+        done(new errorHandler(errors.DATABASE_ERROR, req, req.res));
       }
     }
   )
@@ -85,7 +85,7 @@ passport.use(
         delete req.body.password;
         done(null, userDB);
       } catch (err) {
-        done(new errorHandler(errors.undefined, req, req.res));
+        done(new errorHandler(errors.DATABASE_ERROR, req, req.res));
       }
     }
   )
@@ -120,7 +120,7 @@ passport.use(
         }
         done(null, userDB);
       } catch (err) {
-        done(new errorHandler(errors.undefined, req, req.res));
+        done(new errorHandler(errors.DATABASE_ERROR, req, req.res));
       }
     }
   )

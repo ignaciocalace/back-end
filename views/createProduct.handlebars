@@ -1,0 +1,40 @@
+<h1>Create your Product</h1>
+<form id="createProductForm">
+  <label for="title">Title</label>
+  <input id="title" required />
+  <br />
+
+  <label for="description">Description</label>
+  <input id="description" required />
+  <br />
+
+  <label for="code">Code</label>
+  <input id="code" type="number" required />
+  <br />
+
+  <label for="price">Price</label>
+  <input id="price" type="number" min="0" required />
+  <br />
+
+  <label for="status">Status</label>
+  <select id="status" required>
+    <option value="true">True</option>
+    <option value="false">False</option>
+  </select>
+
+  <label for="stock">Stock</label>
+  <input id="stock" type="number" required />
+  <br />
+
+  <br />
+  <label for="category">Category</label>
+  <input id="category" required />
+  <br />
+  <label for="thumbnails">Thumbnails</label>
+  <input id="thumbnails" />
+  <br />
+
+  <button type="submit">Add Product</button>
+</form>
+
+<script src="/js/createProduct.js"></script>

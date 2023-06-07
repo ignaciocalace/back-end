@@ -2,12 +2,12 @@ import passport from "passport";
 import { errorHandler } from "./errorsHandler.js";
 import { errors } from "../errors/errors.js";
 
-const authenticate = (req, res, next, role) => {
+const authenticate = (req, res, next, roles) => {
   passport.authenticate("verifyTokenAuth", (err, user) => {
     if (!user) {
       return new errorHandler(errors.NOT_LOGGED_IN, req, res);
     }
-    if (role && user.role !== role) {
+    if (roles && !roles.includes(user.role)) {
       return new errorHandler(errors.NOT_LOGGED_IN, req, res);
     }
     req.user = user;
@@ -29,9 +29,9 @@ export const isAuthenticated = (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next) => {
-  authenticate(req, res, next, "admin");
+  authenticate(req, res, next, ["admin"]);
 };
 
 export const isUser = (req, res, next) => {
-  authenticate(req, res, next, "user");
+  authenticate(req, res, next, ["user", "premium"]);
 };

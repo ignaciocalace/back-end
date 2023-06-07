@@ -74,21 +74,26 @@ export async function handlePutProdCart(req, res) {
     const cartToAdd = await cartsService.showCart(cid);
     const productOnCart = await cartsService.showProductsOnCart(cid, pid);
     let newProduct;
+
     if (
       productToAdd.length > 0 &&
       cartToAdd.length > 0 &&
       productOnCart.length > 0 &&
-      quantity != ""
+      quantity != "" &&
+      productToAdd[0].owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.updateProductCart(cid, pid, quantity);
       res.status(201).json("Updated");
     } else if (
       productToAdd.length > 0 &&
       cartToAdd.length > 0 &&
-      quantity != ""
+      quantity != "" &&
+      productToAdd[0].owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.addToCart(cid, pid, quantity);
       res.status(200).json("Product added to cart");
+    } else if (productToAdd[0].owner === req["user"]["email"]) {
+      new errorHandler(errors.INVALID_ARG, req, res);
     } else if (productToAdd.length === 0) {
       new errorHandler(errors.NOT_FOUND, req, res);
     } else if (cartToAdd.length === 0) {

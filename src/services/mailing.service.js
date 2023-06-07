@@ -1,6 +1,7 @@
 import { createTransport } from "nodemailer";
 import { EMAIL_CONFIG } from "../config/mailing.js";
 import { errors } from "../errors/errors.js";
+import { errorHandler } from "../middlewares/errorsHandler.js";
 
 class EmailService {
   #nodemailerClient;
@@ -14,15 +15,11 @@ class EmailService {
       from: "Testing email",
       to: recipient,
       subject: subject,
-      text: message,
+      html: message,
     };
 
-    try {
-      const info = await this.#nodemailerClient.sendMail(mailOptions);
-      return info;
-    } catch (err) {
-      new errorHandler(errors.INVALID_ARG, req, req.res);
-    }
+    const info = await this.#nodemailerClient.sendMail(mailOptions);
+    return info;
   }
 }
 

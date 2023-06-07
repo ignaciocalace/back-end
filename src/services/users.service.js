@@ -15,5 +15,8 @@ class UsersService {
   async findCredentials(emailQuery) {
     return await usersRepository.findCredentials(emailQuery);
   }
+  async updateUser(filterKey, filterVal, newUser) {
+    return usersRepository.updateUser(filterKey, filterVal, newUser);
+  }
 }
 export const usersService = new UsersService();

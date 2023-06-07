@@ -5,10 +5,7 @@ class ProductsRepository {
     this.productsDao = productsDao;
   }
   async addProduct(dataNewProduct) {
-    const elements = await this.productsDao.showProduct(
-      "code",
-      dataNewProduct.code
-    );
+    const elements = await this.showProduct("code", dataNewProduct.code);
     if (elements.length === 0) {
       return await this.productsDao.save(dataNewProduct);
     } else {

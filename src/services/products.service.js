@@ -26,8 +26,8 @@ class ProductsService {
   async deleteProduct(filterKey, filterVal) {
     return await productsRepository.deleteProduct(filterKey, filterVal);
   }
-  async updateProduct(filterKey, filterVal, newProduct) {
-    return productsRepository.updateProduct(filterKey, filterVal, newProduct);
+  async updateUser(filterKey, filterVal, newUser) {
+    return usersRepository.updateUser(filterKey, filterVal, newUser);
   }
 }
 
