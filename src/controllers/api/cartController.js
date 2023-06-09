@@ -13,9 +13,10 @@ export async function handlePostCart(req, res) {
       .status(201)
       .json(`Cart created successfully with id: ${newCart._id.valueOf()}`);
   } catch (err) {
-    new errorHandler(errors.DATABASE_ERROR, req, res);
+    new errorHandler(errors.NOT_FOUND, req, res);
   }
 }
+
 export async function handleGetCart(req, res) {
   try {
     const cid = req.params.cid;
@@ -40,7 +41,7 @@ export async function handleGetCart(req, res) {
       cid,
     });
   } catch (err) {
-    new errorHandler(errors.DATABASE_ERROR, req, res);
+    new errorHandler(errors.NOT_FOUND, req, res);
   }
 }
 
@@ -83,7 +84,7 @@ export async function handlePutProdCart(req, res) {
       productToAdd[0].owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.updateProductCart(cid, pid, quantity);
-      res.status(201).json("Updated");
+      res.status(201).json("Product updated successfully");
     } else if (
       productToAdd.length > 0 &&
       cartToAdd.length > 0 &&
@@ -93,7 +94,7 @@ export async function handlePutProdCart(req, res) {
       newProduct = await cartsService.addToCart(cid, pid, quantity);
       res.status(200).json("Product added to cart");
     } else if (productToAdd[0].owner === req["user"]["email"]) {
-      new errorHandler(errors.INVALID_ARG, req, res);
+      new errorHandler(errors.UNAUTHORIZED, req, res);
     } else if (productToAdd.length === 0) {
       new errorHandler(errors.NOT_FOUND, req, res);
     } else if (cartToAdd.length === 0) {
@@ -114,13 +115,13 @@ export async function handlePutCart(req, res) {
     if (toUpdate != {}) {
       let cart = await cartsService.updateCart(cid, toUpdate);
       if (cart.modifiedCount != 0) {
-        res.status(200).json("Cart updated");
+        res.status(200).json("Cart updated successfully");
       } else new errorHandler(errors.NOT_FOUND, req, res);
     } else {
       new errorHandler(errors.INVALID_ARG, req, res);
     }
   } catch (err) {
-    new errorHandler(errors.DATABASE_ERROR, req, res);
+    new errorHandler(errors.NOT_FOUND, req, res);
   }
 }
 export async function handleDeleteProdCart(req, res) {

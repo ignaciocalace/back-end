@@ -59,7 +59,7 @@ export async function handleGetAllProducts(req, res) {
       userData,
     });
   } catch (err) {
-    new errorHandler(errors.INVALID_ARG, req, req.res);
+    new errorHandler(errors.default, req, req.res);
   }
 }
 export async function handleGetProduct(req, res) {

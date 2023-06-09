@@ -1,0 +1,42 @@
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+        code:
+          type: number
+          required: true
+        price:
+          type: number
+          required: true
+        status:
+          type: boolean
+          required: true
+        stock:
+          type: number
+          required: true
+        category:
+          type: string
+          required: true
+        thumbnails:
+          type: string
+          required: false
+        owner:
+          type: string
+          required: false
+      example:
+        title: "Product Title"
+        description: "Product Description"
+        code: 12345
+        price: 500
+        status: true
+        stock: 10
+        category: "Electronics"
+        thumbnails: "https://example.com/thumbnail.jpg"
+        owner: "admin"

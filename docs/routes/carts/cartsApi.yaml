@@ -1,0 +1,161 @@
+paths:
+  /api/carts:
+    post:
+      tags:
+        - Carts
+      summary: Create a new cart
+      requestBody:
+        description: Cart data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cart"
+      responses:
+        "201":
+          description: Cart created successfully
+        "404":
+          description: Resource not found
+
+  /api/carts/{cid}:
+    get:
+      tags:
+        - Carts
+      summary: Get a specific cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID of the cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Resource not found
+
+    put:
+      tags:
+        - Carts
+      summary: Update a specific cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID of the cart
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cart data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cart"
+      responses:
+        "200":
+          description: Cart updated successfully
+        "400":
+          description: Invalid argument
+        "404":
+          description: Resource not found
+
+    delete:
+      tags:
+        - Carts
+      summary: Delete all products from the cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID of the cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Products Deleted
+        "404":
+          description: Resource not found
+
+  /api/carts/{cid}/purchase:
+    get:
+      tags:
+        - Carts
+      summary: Get the purchase of a specific cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID of the cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: New order generated
+        "404":
+          description: Resource not found
+        "500":
+          description: Database error
+
+  /api/carts/{cid}/products/{pid}:
+    put:
+      tags:
+        - Carts
+      summary: Add/Update a specific product in a cart
+      parameters:
+        - name: cid
+          in: path
+          description: ID of the cart
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID of the product
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Product data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: Product updated successfully
+        "200":
+          description: Product added to cart
+        "400":
+          description: Invalid argument
+        "404":
+          description: Resource not found
+        "500":
+          description: Database error
+
+    delete:
+      tags:
+        - Carts
+      summary: Delete a specific product from a cart
+      parameters:
+        - name: cid
+          in: path
+          description: ID of the cart
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID of the product
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product deleted successfully
+        "404":
+          description: Resource not found
+        "500":
+          description: Database error

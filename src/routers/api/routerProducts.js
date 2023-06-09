@@ -12,9 +12,9 @@ const routerProducts = Router();
 
 routerProducts.get("/", isAuthenticated, handleGetAllProducts);
 
-routerProducts.get("/:pid", isAuthenticated, handleGetProduct);
-
 routerProducts.post("/", isAuthenticated, handlePostProduct);
+
+routerProducts.get("/:pid", isAuthenticated, handleGetProduct);
 
 routerProducts.put("/:pid", isAdmin, handlePutProduct);
 

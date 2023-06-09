@@ -1,0 +1,22 @@
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              quantity:
+                type: number
+                minimum: 1
+          default: []
+      example:
+        products:
+          - _id: "123456789"
+            quantity: 2
+          - _id: "987654321"
+            quantity: 1

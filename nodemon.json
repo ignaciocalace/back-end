@@ -1,0 +1,8 @@
+{
+  "ext": "js,yaml,yml",
+  "execMap": {
+    "js": "node",
+    "yaml": "node",
+    "yml": "node"
+  }
+}

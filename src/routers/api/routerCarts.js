@@ -16,14 +16,14 @@ routerCarts.post("/", handlePostCart);
 
 routerCarts.get("/:cid", handleGetCart);
 
+routerCarts.put("/:cid", handlePutCart);
+
+routerCarts.delete("/:cid", handleDeleteCart);
+
 routerCarts.get("/:cid/purchase", isUser, handleGetPurchase);
 
 routerCarts.put("/:cid/products/:pid", isUser, handlePutProdCart);
 
-routerCarts.put("/:cid", handlePutCart);
-
 routerCarts.delete("/:cid/products/:pid", handleDeleteProdCart);
-
-routerCarts.delete("/:cid", handleDeleteCart);
 
 export default routerCarts;
