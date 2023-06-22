@@ -3,6 +3,7 @@ import { PASSJWT } from "../../config/passwords.js";
 import UserDTO from "../../dao/models/userDTO.js";
 import { errors } from "../../errors/errors.js";
 import { errorHandler } from "../../middlewares/errorsHandler.js";
+import { decoToken } from "../../utils/tokenGen.js";
 
 export function loginController(req, res, next) {
   try {
@@ -12,6 +13,6 @@ export function loginController(req, res, next) {
     res.cookie("user", token, { signed: true, httpOnly: true });
     res.redirect("/");
   } catch (err) {
-    new errorHandler(errors.INVALID_TOKEN, req, req.res);
+    new errorHandler(errors.INVALID_TOKEN, req, res);
   }
 }

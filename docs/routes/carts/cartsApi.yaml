@@ -124,9 +124,9 @@ paths:
             schema:
               $ref: "#/components/schemas/Product"
       responses:
-        "201":
-          description: Product updated successfully
         "200":
+          description: Product updated successfully
+        "201":
           description: Product added to cart
         "400":
           description: Invalid argument

@@ -35,8 +35,6 @@ export async function handleGetAllProducts(req, res) {
     let isValid = !(page <= 0 || page > productsPaginate.totalPages);
     if (productsPaginate.docs.length > 0) {
       res.status(200);
-    } else {
-      new errorHandler(errors.NOT_FOUND, req, req.res);
     }
     const isProducts = productsPaginate.docs.length > 0;
     let productsToShow = productsPaginate.docs.map((e) => ({
@@ -82,7 +80,10 @@ export async function handlePostProduct(req, res) {
       const newProduct = new Product(dataProduct);
       const newProductAdded = await productsService.addProduct(newProduct);
       if (newProductAdded) {
-        res.status(201).json("Product added successfully");
+        res.status(201).json({
+          message: "Product added successfully",
+          product: newProductAdded,
+        });
       } else {
         res.status(200).json("Product already added");
       }

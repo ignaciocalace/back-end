@@ -24,7 +24,6 @@ const cookieExtractor = (req) => {
   }
   return token;
 };
-
 passport.use(
   "verifyTokenAuth",
   new JWTStrategy(
@@ -33,7 +32,11 @@ passport.use(
       secretOrKey: PASSJWT,
     },
     function (jwtPayload, done) {
-      done(null, jwtPayload);
+      try {
+        done(null, { user: jwtPayload });
+      } catch (err) {
+        done(err, false);
+      }
     }
   )
 );
@@ -46,16 +49,18 @@ passport.use(
       passwordField: "password",
       passReqToCallback: true,
     },
-    async (req, res, username, password, done) => {
+    async (req, username, password, done) => {
       try {
         const isUser = await usersService.findUser(req.body.email);
-        if (isUser)
+        if (isUser) {
           return done(new errorHandler(errors.DATABASE_ERROR, req, req.res));
+        }
         req.body["password"] = hashPass(req.body["password"]);
         const createCart = new Cart();
         const newCart = await cartsService.createCart(createCart);
         req.body["cart"] = newCart._id.valueOf();
         const newUser = await usersService.addUser(req.body);
+
         done(null, newUser);
       } catch (err) {
         done(new errorHandler(errors.DATABASE_ERROR, req, req.res));

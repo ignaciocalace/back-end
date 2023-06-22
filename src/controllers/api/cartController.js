@@ -84,7 +84,9 @@ export async function handlePutProdCart(req, res) {
       productToAdd[0].owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.updateProductCart(cid, pid, quantity);
-      res.status(201).json("Product updated successfully");
+      res
+        .status(200)
+        .json({ message: "Product updated successfully", product: newProduct });
     } else if (
       productToAdd.length > 0 &&
       cartToAdd.length > 0 &&
@@ -92,7 +94,9 @@ export async function handlePutProdCart(req, res) {
       productToAdd[0].owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.addToCart(cid, pid, quantity);
-      res.status(200).json("Product added to cart");
+      res
+        .status(201)
+        .json({ message: "Product added to cart", product: newProduct });
     } else if (productToAdd[0].owner === req["user"]["email"]) {
       new errorHandler(errors.UNAUTHORIZED, req, res);
     } else if (productToAdd.length === 0) {

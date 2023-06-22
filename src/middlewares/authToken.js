@@ -3,10 +3,11 @@ import { errorHandler } from "./errorsHandler.js";
 import { errors } from "../errors/errors.js";
 
 const authenticate = (req, res, next, roles) => {
-  passport.authenticate("verifyTokenAuth", (err, user) => {
-    if (!user) {
+  passport.authenticate("verifyTokenAuth", (err, payload) => {
+    if (!payload || !payload.user) {
       return new errorHandler(errors.NOT_LOGGED_IN, req, res);
     }
+    const user = payload.user;
     if (roles && !roles.includes(user.role)) {
       return new errorHandler(errors.NOT_LOGGED_IN, req, res);
     }
@@ -14,10 +15,9 @@ const authenticate = (req, res, next, roles) => {
     next();
   })(req, res, next);
 };
-
 export const ensureNotAuthenticated = (req, res, next) => {
-  passport.authenticate("verifyTokenAuth", (err, user) => {
-    if (user) {
+  passport.authenticate("verifyTokenAuth", (err, payload) => {
+    if (payload && payload.user) {
       return res.redirect("/profile");
     }
     next();

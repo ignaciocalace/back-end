@@ -3,19 +3,20 @@
   "name": "backend-git",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "main.js",
   "scripts": {
     "start": "node .",
     "start:dev": "nodemon -e 'js,handlebars,html' .",
     "test:products": "nodemon -e 'js,handlebars,html' test/services/products.service.test.js",
-    "server": "nodemon src/app.js"
+    "server": "nodemon src/main.js",
+    "test": "mocha --recursive"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ignaciocalace/back-end.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ignacio Calace",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ignaciocalace/back-end/issues"
@@ -26,12 +27,12 @@
     "bcrypt": "^5.1.0",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
-    "dotenv": "^16.1.4",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.2.2",
+    "mongoose": "^7.3.1",
     "mongoose-paginate-v2": "^1.7.1",
     "mongoose-populate": "^3.0.3",
     "nodemailer": "^6.9.3",
@@ -46,5 +47,13 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
     "winston": "^3.9.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  },
+  "mocha": {
+    "timeout": "2000",
+    "require": "test/globalHooks.js"
   }
 }
