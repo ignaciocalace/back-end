@@ -14,7 +14,7 @@ let transports = [];
 
 if (NODE_ENV === "production") {
   transports = [
-    new winston.transports.Console({ level: "warning" }),
+    new winston.transports.Console({ level: "info" }),
     new winston.transports.File({
       level: "error",
       filename: "errors.log",

@@ -18,11 +18,8 @@ import { errors } from "../errors/errors.js";
 const JWTStrategy = passportJwt.Strategy;
 
 const cookieExtractor = (req) => {
-  let token = null;
-  if (req.signedCookies && req.signedCookies["user"]) {
-    token = req.signedCookies["user"];
-  }
-  return token;
+  let cookieToken = req.signedCookies && req.signedCookies["user"];
+  return cookieToken;
 };
 passport.use(
   "verifyTokenAuth",

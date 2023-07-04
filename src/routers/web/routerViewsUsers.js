@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   ensureNotAuthenticated,
   isAuthenticated,
+  isLastConnected,
 } from "../../middlewares/authToken.js";
 const routerViewsUsers = Router();
 
@@ -21,8 +22,13 @@ routerViewsUsers.get("/profile", isAuthenticated, (req, res) => {
   res.render("profile", { user: req["user"] });
 });
 
-routerViewsUsers.get("/logout", isAuthenticated, (req, res) => {
-  return res.clearCookie("user").redirect("/");
-});
+routerViewsUsers.get(
+  "/logout",
+  isAuthenticated,
+  isLastConnected,
+  (req, res) => {
+    return res.clearCookie("user").redirect("/");
+  }
+);
 
 export default routerViewsUsers;

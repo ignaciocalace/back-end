@@ -1,6 +1,7 @@
 import passport from "passport";
 import { errorHandler } from "./errorsHandler.js";
 import { errors } from "../errors/errors.js";
+import { usersService } from "../services/users.service.js";
 
 const authenticate = (req, res, next, roles) => {
   passport.authenticate("verifyTokenAuth", (err, payload) => {
@@ -35,3 +36,12 @@ export const isAdmin = (req, res, next) => {
 export const isUser = (req, res, next) => {
   authenticate(req, res, next, ["user", "premium"]);
 };
+
+export async function isLastConnected(req, res, next) {
+  const { email } = req.user;
+  const updatedFields = {
+    last_connection: new Date(),
+  };
+  await usersService.updateUser("email", email, updatedFields);
+  next();
+}

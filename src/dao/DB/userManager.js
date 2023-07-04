@@ -9,6 +9,13 @@ const userSchema = new Schema({
   password: { type: String, required: false },
   cart: { type: String, required: true },
   role: { type: String, required: true },
+  documents: [
+    {
+      name: { type: String, required: false },
+      reference: { type: String, required: false },
+    },
+  ],
+  last_connection: { type: Date, default: Date.now },
 });
 
 export const userManager = new ManagerMongoose("users", userSchema);

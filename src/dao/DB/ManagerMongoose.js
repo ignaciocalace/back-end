@@ -14,7 +14,7 @@ export class ManagerMongoose {
     try {
       return await this.collection.create(register);
     } catch (err) {
-      new errorHandler(errors.DATABASE_ERROR, req, req.res);
+      new errorHandler(errors.DATABASE_ERROR);
     }
   }
 
@@ -28,7 +28,7 @@ export class ManagerMongoose {
         .sort(querySort)
         .lean();
     } catch (err) {
-      new errorHandler(errors.DATABASE_ERROR, req, req.res);
+      new errorHandler(errors.DATABASE_ERROR);
     }
   }
 
@@ -36,7 +36,7 @@ export class ManagerMongoose {
     try {
       return await this.collection.findOne(queryFilter);
     } catch (err) {
-      new errorHandler(errors.DATABASE_ERROR, req, req.res);
+      new errorHandler(errors.DATABASE_ERROR);
     }
   }
 
@@ -44,7 +44,7 @@ export class ManagerMongoose {
     try {
       return await this.collection.paginate(queryFilter, options);
     } catch (err) {
-      new errorHandler(errors.DATABASE_ERROR, req, req.res);
+      new errorHandler(errors.DATABASE_ERROR);
     }
   }
 
@@ -54,7 +54,7 @@ export class ManagerMongoose {
         multi: true,
       });
     } catch (err) {
-      new errorHandler(errors.DATABASE_ERROR, req, req.res);
+      new errorHandler(errors.DATABASE_ERROR);
     }
   }
 
@@ -62,7 +62,7 @@ export class ManagerMongoose {
     try {
       return await this.collection.deleteMany(queryFilter);
     } catch (err) {
-      new errorHandler(errors.DATABASE_ERROR, req, req.res);
+      new errorHandler(errors.DATABASE_ERROR);
     }
   }
 }

@@ -9,7 +9,17 @@ function isRole(value) {
 }
 
 export class User {
-  constructor(name, surname, email, age, password, cart, role) {
+  constructor(
+    name,
+    surname,
+    email,
+    age,
+    password,
+    cart,
+    role,
+    documents = [],
+    last_connection = new Date()
+  ) {
     this.name = name;
     this.surname = surname;
     this.email = email;
@@ -17,5 +27,7 @@ export class User {
     this.password = password;
     this.cart = cart;
     this.role = isRole(role);
+    this.documents = documents;
+    this.last_connection = last_connection;
   }
 }

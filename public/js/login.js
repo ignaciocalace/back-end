@@ -44,17 +44,13 @@ loginForm.addEventListener("submit", async (e) => {
 });
 
 async function send(url, opt) {
-  await fetch(url, opt)
-    .then((res) => {
-      if (res.status === 500) {
-        alertPass("Wrong Credentials");
-      } else if (res.status === 200) {
-        window.location.href = "/";
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  await fetch(url, opt).then((res) => {
+    if (res.status === 500) {
+      alertPass("Wrong Credentials");
+    } else if (res.status === 200) {
+      window.location.href = "/";
+    }
+  });
 }
 
 function alertPass(msj) {
