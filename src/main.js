@@ -17,7 +17,7 @@ async function connectToMongoDB() {
 }
 connectToMongoDB();
 
-const server = app.listen(8080, "0.0.0.0", () => {
+const server = app.listen(8080, () => {
   winstonLogger.info("Server is running on port 8080");
 });
 
