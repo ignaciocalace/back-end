@@ -1,7 +1,5 @@
 import { createTransport } from "nodemailer";
 import { EMAIL_CONFIG } from "../config/mailing.js";
-import { errors } from "../errors/errors.js";
-import { errorHandler } from "../middlewares/errorsHandler.js";
 
 class EmailService {
   #nodemailerClient;
