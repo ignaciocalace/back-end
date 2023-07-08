@@ -22,9 +22,9 @@ async function sendToCart(event) {
 
 async function send(url, opt) {
   await fetch(url, opt).then((res) => {
-    if (res.status === 201) {
+    if (res.status === 200) {
       alertPass("Quantity updated");
-    } else if (res.status === 200) {
+    } else if (res.status === 201) {
       alertPass("Product added to the cart");
     } else if (res.status === 403) {
       alertPass("You cant add your own product");

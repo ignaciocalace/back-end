@@ -1,9 +1,11 @@
 import { Router } from "express";
 import {
   ensureNotAuthenticated,
+  isAdmin,
   isAuthenticated,
   isLastConnected,
 } from "../../middlewares/authToken.js";
+import { usersService } from "../../services/users.service.js";
 const routerViewsUsers = Router();
 
 routerViewsUsers.get("/", (req, res) => {
@@ -19,7 +21,15 @@ routerViewsUsers.get("/login", ensureNotAuthenticated, (req, res) => {
 });
 
 routerViewsUsers.get("/profile", isAuthenticated, (req, res) => {
-  res.render("profile", { user: req["user"] });
+  res.render("profile", {
+    user: req["user"],
+    isAdmin: req["user"].role === "admin",
+    isPremium: req["user"].role === "premium" || req["user"].role === "admin",
+  });
+});
+routerViewsUsers.get("/admin", isAdmin, async (req, res) => {
+  const userList = await usersService.findAllUsers();
+  res.render("admin", { userList });
 });
 
 routerViewsUsers.get(

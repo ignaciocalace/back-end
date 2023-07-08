@@ -15,7 +15,6 @@ async function connectToMongoDB() {
     process.exit(1);
   }
 }
-
 connectToMongoDB();
 
 const server = app.listen(8080, () => {
@@ -25,7 +24,6 @@ const server = app.listen(8080, () => {
 const io = new Server(server);
 
 io.on("connection", (socket) => {
-  console.log("New socket connected");
   ProductsSocket(io, socket);
   MessagesSocket(io, socket);
 });

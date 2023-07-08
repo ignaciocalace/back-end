@@ -8,9 +8,19 @@
   <p>Role: {{user.role}}</p>
 </div>
 <div class="nav-btn">
+  {{#if isAdmin}}
+    <form action="/admin" method="get">
+      <button type="submit">Admin</button>
+    </form>
+  {{/if}}
   <form action="/api/products" method="get">
     <button class="green-btn" type="submit">Products</button>
   </form>
+  {{#if isPremium}}
+    <form action="/createProduct" method="get">
+      <button class="blue-btn" type="submit">Create Product</button>
+    </form>
+  {{/if}}
   <form action="/logout" method="get">
     <button class="red-btn" type="submit">Logout</button>
   </form>

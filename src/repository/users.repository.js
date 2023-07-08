@@ -19,6 +19,18 @@ class UsersRepository {
     }
   }
 
+  async getAllUsers() {
+    const allUsers = await this.usersDao.get({}, 0);
+    return allUsers.map((user) => new UserDTO(user));
+  }
+  async getAllInactive(filterVal) {
+    const allUsers = await this.usersDao.get(
+      { last_connection: { $lt: filterVal } },
+      0
+    );
+    return allUsers.map((user) => new UserDTO(user));
+  }
+
   async findUserId(queryFilter) {
     return await this.usersDao.getOne({ _id: queryFilter });
   }
@@ -34,5 +46,14 @@ class UsersRepository {
     const updateUser = await this.usersDao.update(queryFilter, newUser);
     return updateUser;
   }
+  async deleteUser(filterKey, filterVal) {
+    let queryFilter = {};
+    queryFilter[filterKey] = filterVal;
+    return await this.usersDao.delete(queryFilter);
+  }
+  async deleteAllInactive(filterVal) {
+    return await this.usersDao.delete({ last_connection: { $lt: filterVal } });
+  }
 }
+
 export const usersRepository = new UsersRepository(userManager);

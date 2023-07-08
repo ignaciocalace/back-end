@@ -1,0 +1,15 @@
+<h1>Your Purchase</h1>
+{{#if newOrder}}
+
+  <div>
+    <p>Amount: {{newOrder.0.amount}}</p>
+    <p>Purchase code: {{newOrder.0.code}}</p>
+    <p>Purchase date: {{newOrder.0.purchase_datetime}}</p>
+  </div>
+
+{{/if}}
+<div class="nav-btn">
+  <form action="/profile" method="get">
+    <button type="submit">Profile</button>
+  </form>
+</div>

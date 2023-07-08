@@ -87,6 +87,8 @@ export async function handlePostProduct(req, res) {
       } else {
         res.status(200).json("Product already added");
       }
+    } else {
+      new errorHandler(errors.UNAUTHORIZED, req, req.res);
     }
   } catch (err) {
     new errorHandler(errors.INVALID_ARG, req, req.res);
@@ -101,7 +103,7 @@ export async function handlePutProduct(req, res) {
       pid,
       dataProduct
     );
-    updatedProduct.matchedCount = 1
+    updatedProduct.matchedCount === 1
       ? res.status(201).json("Product updated successfully")
       : new errorHandler(errors.NOT_FOUND, req, req.res);
   } catch (err) {
@@ -111,19 +113,27 @@ export async function handlePutProduct(req, res) {
 export async function handleDeleteProduct(req, res) {
   try {
     const pid = req.params.pid;
-    let deleteElement;
-    if (req["user"]["role"] === "admin") {
-      deleteElement = await productsService.deleteProduct("_id", pid);
-    } else if (req["user"]["role"] === "premium") {
-      let ProductToDelete = await productsService.showProduct("_id", pid);
-      if (ProductToDelete.owner === req["user"]["email"]) {
-        deleteElement = await productsService.deleteProduct("_id", pid);
+    const userRole = req.user.role;
+    const userEmail = req.user.email;
+
+    let productToDelete = await productsService.showProduct("_id", pid);
+
+    if (
+      userRole === "admin" ||
+      (userRole === "premium" && productToDelete.owner === userEmail)
+    ) {
+      const deleteResult = await productsService.deleteProduct("_id", pid);
+      if (deleteResult.deletedCount === 1) {
+        await emailService.send(
+          productToDelete.owner,
+          "Product Deleted",
+          "<h2>Your product has been deleted.</h2>"
+        );
+        return res.status(200).json("Product deleted successfully");
       }
     }
-    deleteElement.deletedCount === 1
-      ? res.status(200).json("Product deleted successfully")
-      : new errorHandler(errors.NOT_FOUND, req, req.res);
+    throw new errorHandler(errors.NOT_FOUND);
   } catch (err) {
-    new errorHandler(errors.INVALID_ARG, req, req.res);
+    new errorHandler(errors.INVALID_ARG, req, res);
   }
 }

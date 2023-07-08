@@ -4,7 +4,6 @@ import { routerChat } from "./routerChat.js";
 import routersViewUsers from "./routerViewsUsers.js";
 import { routerCreateProduct } from "./routerCreateProduct.js";
 import { routerForgotPass } from "./routerForgotPass.js";
-import routerRecoverPass from "../api/routerRecoverPass.js";
 import routerResetPass from "./routerResetPass.js";
 
 export const webRouter = Router();

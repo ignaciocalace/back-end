@@ -6,7 +6,7 @@ class ProductsRepository {
   }
   async addProduct(dataNewProduct) {
     const elements = await this.showProduct("code", dataNewProduct.code);
-    if (elements.length === 0) {
+    if (!elements) {
       return await this.productsDao.save(dataNewProduct);
     } else {
       return false;
@@ -21,7 +21,7 @@ class ProductsRepository {
       sortKey,
       sortVal
     );
-    return products;
+    return products[0];
   }
   async showPaginate(queryFilter = {}, page = 1, limit = 10, sort) {
     let options = { limit: limit, page: page, sort: { price: sort } };

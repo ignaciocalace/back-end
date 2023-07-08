@@ -1,22 +1,38 @@
 import { errors } from "../../errors/errors.js";
 import { errorHandler } from "../../middlewares/errorsHandler.js";
+import { emailService } from "../../services/mailing.service.js";
 import { tokenPassService } from "../../services/tokenPass.service.js";
 import { usersService } from "../../services/users.service.js";
 import { comparePass, hashPass } from "../../utils/crypt.js";
 import { decoToken } from "../../utils/tokenGen.js";
 
+export async function handleGetAllUsers(req, res) {
+  try {
+    const users = await usersService.findAllUsers();
+    const filteredUsers = users.map(({ name, email, role }) => ({
+      name,
+      email,
+      role,
+    }));
+    res.status(200).json(filteredUsers);
+  } catch (err) {
+    new errorHandler(errors.DATABASE_ERROR, req, req.res);
+  }
+}
 export async function handlePutUserRole(req, res) {
   function findMatchingObjects(array, searchWord) {
     return array.find((obj) => obj.name === searchWord);
   }
 
   try {
-    const uid = req.params.uid;
-    const userToUpdate = await usersService.findUserId(uid);
-
+    let uid = req.params.uid;
+    let userToUpdate =
+      (await usersService.findUserId(uid)) ||
+      (await usersService.findCredentials(uid));
     if (!userToUpdate) {
       throw new Error("INVALID_ARG");
     }
+    uid = userToUpdate._id;
     if (userToUpdate.role === "user") {
       if (
         userToUpdate.documents &&
@@ -59,10 +75,10 @@ export async function handlePutUserPass(req, res) {
     if (comparePass(req.body.password, userDB.password)) {
       return new errorHandler(errors.INVALID_ARG, req, res);
     } else {
-      const updatedUser = await usersService.updateUser("email", userEmail, {
+      await usersService.updateUser("email", userEmail, {
         password: hashPass(req.body.password),
       });
-      const removeToken = await tokenPassService.removeToken(req.body.token);
+      await tokenPassService.removeToken(req.body.token);
     }
     delete userDB.password;
     delete req.body.password;
@@ -71,7 +87,6 @@ export async function handlePutUserPass(req, res) {
     new errorHandler(errors.INVALID_ARG, req, req.res);
   }
 }
-
 export async function handlePostFileSaver(req, res) {
   const mergeDocuments = (userDocuments, newDocuments) => {
     const newDocumentNames = newDocuments.map((newDoc) => newDoc.name);
@@ -102,7 +117,50 @@ export async function handlePostFileSaver(req, res) {
 
     res.status(201).json({ message: "User documents updated successfully" });
   } catch (err) {
-    console.error("Error:", err);
     new errorHandler(errors.INVALID_ARG, req, res);
+  }
+}
+export async function handleDeleteUser(req, res) {
+  try {
+    const uid = req.params.uid;
+    let user =
+      (await usersService.findUserId(uid)) ||
+      (await usersService.findCredentials(uid));
+    if (!user) {
+      throw new errorHandler(errors.NOT_FOUND);
+    }
+    await emailService.send(
+      user.email,
+      "Account Deleted",
+      "<h2>Your account has been deleted.</h2>"
+    );
+    await usersService.deleteUser("email", user.email);
+    res.status(200).json("User deleted successfully");
+  } catch (err) {
+    new errorHandler(errors.NOT_FOUND, req, res);
+  }
+}
+
+export async function handleDeleteInactiveUsers(req, res) {
+  try {
+    const inactiveHours = 48;
+    const minLastConnection = new Date();
+    minLastConnection.setHours(minLastConnection.getHours() - inactiveHours);
+    const inactiveUsers = await usersService.findAllInactive(minLastConnection);
+    if (inactiveUsers.length === 0) {
+      return new errorHandler(errors.NOT_FOUND, req, res);
+    }
+
+    for (const user of inactiveUsers) {
+      await emailService.send(
+        user.email,
+        "Account Deleted",
+        `<h2>Your account has been deleted for inactivity.</h2>`
+      );
+    }
+    await usersService.deleteAllInactive(minLastConnection);
+    res.status(200).json("Inactive users deleted successfully");
+  } catch (err) {
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }

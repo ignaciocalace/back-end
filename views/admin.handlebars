@@ -1,0 +1,69 @@
+<div>
+  <h2>Admin Panel</h2>
+  <div class="nav-btn">
+    <form action="/profile" method="get">
+      <button class="green-btn" type="submit">Profile</button>
+    </form>
+    <form action="/logout" method="get">
+      <button class="red-btn" type="submit">Logout</button>
+    </form>
+  </div>
+  <div class="nav-btn">
+    <form>
+      <input
+        type="hidden"
+        id="deleteBtnUser"
+        name="deleteBtnUser"
+        value="{{email}}"
+      />
+      <button
+        type="button"
+        class="red-btn"
+        onclick="deleteAllInactives(event)"
+      >Delete Inactives Users</button>
+    </form>
+  </div>
+
+  {{#if userList}}
+    <h3>Users</h3>
+    {{#each userList}}
+      <ul>
+
+        <li>Name: {{name}}</li>
+        <li>Email: {{email}}</li>
+        <li>Role: {{role}}</li>
+
+        <form>
+          <input
+            type="hidden"
+            id="changeRoleBtnUser"
+            name="changeRoleBtnUser"
+            value="{{email}}"
+          />
+          <button
+            class="blue-btn"
+            type="button"
+            onclick="changeRole(event)"
+          >Change Role</button>
+        </form>
+        <form>
+          <input
+            type="hidden"
+            id="deleteBtnUser"
+            name="deleteBtnUser"
+            value="{{email}}"
+          />
+          <button
+            class="red-btn"
+            type="button"
+            onclick="deleteUser(event)"
+          >Delete user</button>
+        </form>
+      </ul>
+    {{/each}}
+  {{else}}
+    <h3>No users to show</h3>
+  {{/if}}
+
+</div>
+<script src="/js/admin.js"></script>

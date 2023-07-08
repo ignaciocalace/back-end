@@ -21,7 +21,7 @@ class CartsRepository {
       sortKey,
       sortVal
     );
-    return products;
+    return products[0];
   }
 
   async showProductsOnCart(cartId, productId = {}) {

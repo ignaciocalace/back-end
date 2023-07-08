@@ -21,9 +21,8 @@ export async function handleGetCart(req, res) {
   try {
     const cid = req.params.cid;
     let showCart = await cartsService.showCart(cid);
-    showCart = showCart[0];
     res.status(200);
-    let isProducts = showCart != undefined;
+    let isProducts = showCart.products.length != 0;
     let cartToShow = showCart.products.map((e) => ({
       title: e._id.title,
       description: e._id.description,
@@ -49,15 +48,16 @@ export async function handleGetPurchase(req, res) {
   try {
     const cid = req.params.cid;
     const showCart = await cartsService.showCart(cid);
-    const toTicket = showCart[0].products.filter(
-      (e) => e.quantity <= e._id.stock
-    );
-    const toCart = showCart[0].products.filter((e) => e.quantity > e._id.stock);
+    const toTicket = showCart.products.filter((e) => e.quantity <= e._id.stock);
+    const toCart = showCart.products.filter((e) => e.quantity > e._id.stock);
     const updatedCart = toCart.length !== 0 ? toCart : [];
     await cartsService.updateCart(cid, updatedCart);
     if (toTicket.length !== 0) {
       const newOrder = await ticketsService.newTicket(req.user.email, toTicket);
-      res.status(201).json(newOrder);
+      res.status(201);
+      res.render("purchase", {
+        newOrder: [newOrder._doc],
+      });
     } else {
       new errorHandler(errors.NOT_FOUND, req, res);
     }
@@ -77,31 +77,31 @@ export async function handlePutProdCart(req, res) {
     let newProduct;
 
     if (
-      productToAdd.length > 0 &&
-      cartToAdd.length > 0 &&
+      productToAdd &&
+      cartToAdd &&
       productOnCart.length > 0 &&
       quantity != "" &&
-      productToAdd[0].owner != req["user"]["email"]
+      productToAdd.owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.updateProductCart(cid, pid, quantity);
       res
         .status(200)
         .json({ message: "Product updated successfully", product: newProduct });
     } else if (
-      productToAdd.length > 0 &&
-      cartToAdd.length > 0 &&
+      productToAdd &&
+      cartToAdd &&
       quantity != "" &&
-      productToAdd[0].owner != req["user"]["email"]
+      productToAdd.owner != req["user"]["email"]
     ) {
       newProduct = await cartsService.addToCart(cid, pid, quantity);
       res
         .status(201)
         .json({ message: "Product added to cart", product: newProduct });
-    } else if (productToAdd[0].owner === req["user"]["email"]) {
+    } else if (productToAdd.owner === req["user"]["email"]) {
       new errorHandler(errors.UNAUTHORIZED, req, res);
-    } else if (productToAdd.length === 0) {
+    } else if (productToAdd) {
       new errorHandler(errors.NOT_FOUND, req, res);
-    } else if (cartToAdd.length === 0) {
+    } else if (cartToAdd) {
       new errorHandler(errors.NOT_FOUND, req, res);
     } else if (quantity === "") {
       new errorHandler(errors.INVALID_ARG, req, res);

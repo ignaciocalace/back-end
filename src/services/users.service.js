@@ -8,7 +8,12 @@ class UsersService {
   async findUser(queryFilter) {
     return await usersRepository.findUser(queryFilter);
   }
-
+  async findAllUsers() {
+    return await usersRepository.getAllUsers();
+  }
+  async findAllInactive(value) {
+    return await usersRepository.getAllInactive(value);
+  }
   async findUserId(queryFilter) {
     return await usersRepository.findUserId(queryFilter);
   }
@@ -17,6 +22,12 @@ class UsersService {
   }
   async updateUser(filterKey, filterVal, newUser) {
     return usersRepository.updateUser(filterKey, filterVal, newUser);
+  }
+  async deleteUser(filterKey, filterVal) {
+    return await usersRepository.deleteUser(filterKey, filterVal);
+  }
+  async deleteAllInactive(filterVal) {
+    return await usersRepository.deleteAllInactive(filterVal);
   }
 }
 export const usersService = new UsersService();
