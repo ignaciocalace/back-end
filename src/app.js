@@ -5,11 +5,11 @@ import handlebars from "express-handlebars";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-import { apiRouter } from "../routers/api/api.router.js";
-import { webRouter } from "../routers/web/web.router.js";
-import { passportInitialize } from "../middlewares/passport.js";
-import { COOKIESIGN, PASSJWT } from "../config/passwords.js";
-import { logger } from "../middlewares/logger.js";
+import { apiRouter } from "./routers/api/api.router.js";
+import { webRouter } from "./routers/web/web.router.js";
+import { passportInitialize } from "./middlewares/passport.js";
+import { COOKIESIGN, PASSJWT } from "./config/passwords.js";
+import { logger } from "./middlewares/logger.js";
 
 export const app = express();
 

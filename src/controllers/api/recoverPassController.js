@@ -1,10 +1,10 @@
-import { TokenPass } from "../../dao/models/tokenPass.js";
 import { errors } from "../../errors/errors.js";
-import { errorHandler } from "../../middlewares/errorsHandler.js";
-import { emailService } from "../../services/mailing.service.js";
-import { tokenPassService } from "../../services/tokenPass.service.js";
-import { usersService } from "../../services/users.service.js";
 import { genToken } from "../../utils/tokenGen.js";
+import { TokenPass } from "../../dao/models/tokenPass.js";
+import { usersService } from "../../services/users.service.js";
+import { emailService } from "../../services/mailing.service.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
+import { tokenPassService } from "../../services/tokenPass.service.js";
 
 export async function recoverPassController(req, res) {
   try {
