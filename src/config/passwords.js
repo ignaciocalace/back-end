@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const MONGODB_CNX_STR = process.env.MONGODB_CNX_STR;
-
+export const PORT = process.env.PORT;
 export const PASSJWT = process.env.PASSJWT;
 export const COOKIESIGN = process.env.COOKIESIGN;
 
