@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import { PASSJWT } from "../../config/passwords.js";
-import UserDTO from "../../dao/models/userDTO.js";
 import { errors } from "../../errors/errors.js";
-import { errorHandler } from "../../middlewares/errorsHandler.js";
+import UserDTO from "../../dao/models/userDTO.js";
+import { PASSJWT } from "../../config/passwords.js";
 import { usersService } from "../../services/users.service.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
 
 export async function loginController(req, res, next) {
   try {

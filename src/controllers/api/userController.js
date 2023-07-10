@@ -1,10 +1,10 @@
 import { errors } from "../../errors/errors.js";
-import { errorHandler } from "../../middlewares/errorsHandler.js";
-import { emailService } from "../../services/mailing.service.js";
-import { tokenPassService } from "../../services/tokenPass.service.js";
-import { usersService } from "../../services/users.service.js";
-import { comparePass, hashPass } from "../../utils/crypt.js";
 import { decoToken } from "../../utils/tokenGen.js";
+import { comparePass, hashPass } from "../../utils/crypt.js";
+import { usersService } from "../../services/users.service.js";
+import { emailService } from "../../services/mailing.service.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
+import { tokenPassService } from "../../services/tokenPass.service.js";
 
 export async function handleGetAllUsers(req, res) {
   try {
@@ -129,15 +129,18 @@ export async function handleDeleteUser(req, res) {
     if (!user) {
       throw new errorHandler(errors.NOT_FOUND);
     }
-    await emailService.send(
-      user.email,
-      "Account Deleted",
-      "<h2>Your account has been deleted.</h2>"
-    );
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(uid)) {
+      await emailService.send(
+        user.email,
+        "Account Deleted",
+        "<h2>Your account has been deleted.</h2>"
+      );
+    }
     await usersService.deleteUser("email", user.email);
     res.status(200).json("User deleted successfully");
   } catch (err) {
-    new errorHandler(errors.NOT_FOUND, req, res);
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }
 
@@ -152,11 +155,14 @@ export async function handleDeleteInactiveUsers(req, res) {
     }
 
     for (const user of inactiveUsers) {
-      await emailService.send(
-        user.email,
-        "Account Deleted",
-        `<h2>Your account has been deleted for inactivity.</h2>`
-      );
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailRegex.test(user.email)) {
+        await emailService.send(
+          user.email,
+          "Account Deleted",
+          `<h2>Your account has been deleted for inactivity.</h2>`
+        );
+      }
     }
     await usersService.deleteAllInactive(minLastConnection);
     res.status(200).json("Inactive users deleted successfully");

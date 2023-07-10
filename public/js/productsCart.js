@@ -20,6 +20,20 @@ async function sendToCart(event) {
   return false;
 }
 
+async function deleteProd(event) {
+  form = event.target.closest("form");
+  console.log(form);
+  const url = `/api/products/${form.elements.deleteBtnPrd.value}`;
+  const opt = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+  };
+  await sendDelProd(url, opt);
+  return false;
+}
+
 async function send(url, opt) {
   await fetch(url, opt).then((res) => {
     if (res.status === 200) {
@@ -32,6 +46,17 @@ async function send(url, opt) {
       alertPass("Invalid Operation");
     }
   });
+}
+
+async function sendDelProd(url, opt) {
+  const res = await fetch(url, opt);
+  if (res.status === 200) {
+    alertPass("Product deleted succesfully");
+  } else if (res.status === 404) {
+    alertPass("You cant delete this product");
+  } else {
+    alertPass("Error Database");
+  }
 }
 
 function alertPass(msj) {

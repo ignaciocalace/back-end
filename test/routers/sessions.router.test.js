@@ -1,10 +1,10 @@
 import assert from "assert";
-import supertest from "supertest";
-import mongoose from "mongoose";
-import * as mocks from "../mocks.js";
-import { extractTokenFromSignedCookie } from "../utils.js";
-import { PASSJWT } from "../../src/config/passwords.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import supertest from "supertest";
+import * as mocks from "../mocks.js";
+import { PASSJWT } from "../../src/config/passwords.js";
+import { extractTokenFromSignedCookie } from "../utils.js";
 
 const PORT = 8080;
 const serverBaseUrl = `http://localhost:${PORT}`;

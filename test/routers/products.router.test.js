@@ -1,6 +1,6 @@
 import assert from "assert";
-import supertest from "supertest";
 import mongoose from "mongoose";
+import supertest from "supertest";
 import * as mocks from "../mocks.js";
 
 const PORT = 8080;

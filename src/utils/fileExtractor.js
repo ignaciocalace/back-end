@@ -1,8 +1,9 @@
 import multer from "multer";
 import fs from "fs";
+import { errors } from "../errors/errors.js";
 import { usersService } from "../services/users.service.js";
 import { errorHandler } from "../middlewares/errorsHandler.js";
-import { errors } from "../errors/errors.js";
+
 const storage = multer.diskStorage({
   filename: async function (req, file, cb) {
     let uid = req.params.uid;

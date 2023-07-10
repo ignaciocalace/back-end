@@ -1,19 +1,19 @@
-import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as GithubStrategy } from "passport-github2";
-import { usersService } from "../services/users.service.js";
-import { comparePass, hashPass } from "../utils/crypt.js";
-import passportJwt from "passport-jwt";
-import { cartsService } from "../services/carts.service.js";
-import { Cart } from "../dao/models/Cart.js";
 import {
   CBURLGITHUB,
   CLIENTIDGITHUB,
   CLIENTSECRETGITHUB,
   PASSJWT,
 } from "../config/passwords.js";
-import { errorHandler } from "./errorsHandler.js";
+import passport from "passport";
+import passportJwt from "passport-jwt";
 import { errors } from "../errors/errors.js";
+import { Cart } from "../dao/models/Cart.js";
+import { errorHandler } from "./errorsHandler.js";
+import { comparePass, hashPass } from "../utils/crypt.js";
+import { Strategy as LocalStrategy } from "passport-local";
+import { usersService } from "../services/users.service.js";
+import { Strategy as GithubStrategy } from "passport-github2";
+import { cartsService } from "../services/carts.service.js";
 
 const JWTStrategy = passportJwt.Strategy;
 

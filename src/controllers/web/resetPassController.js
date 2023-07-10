@@ -1,5 +1,5 @@
-import { tokenPassService } from "../../services/tokenPass.service.js";
 import { decoToken } from "../../utils/tokenGen.js";
+import { tokenPassService } from "../../services/tokenPass.service.js";
 
 export async function resetPassController(req, res, next) {
   try {

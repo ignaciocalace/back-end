@@ -60,17 +60,13 @@ createProductForm.addEventListener("submit", async (e) => {
 });
 
 async function send(url, opt) {
-  try {
-    const res = await fetch(url, opt);
-    if (res.status === 201) {
-      alertPass("Product added succesfully");
-    } else if (res.status === 200) {
-      alertPass("Code product already added");
-    } else {
-      alertPass("Error Database");
-    }
-  } catch (error) {
-    alertPass("Error: " + error.message);
+  const res = await fetch(url, opt);
+  if (res.status === 201) {
+    alertPass("Product added succesfully");
+  } else if (res.status === 200) {
+    alertPass("Code product already added");
+  } else {
+    alertPass("Error Database");
   }
 }
 

@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
-import { ManagerMongoose } from "./ManagerMongoose.js";
 import mongoosePaginate from "mongoose-paginate-v2";
+import { ManagerMongoose } from "./ManagerMongoose.js";
 
 const productSchema = new Schema({
   title: { type: String, required: true },

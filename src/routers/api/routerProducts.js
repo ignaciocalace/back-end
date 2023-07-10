@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { isAdmin, isAuthenticated } from "../../middlewares/authToken.js";
 import {
   handleDeleteProduct,
   handleGetAllProducts,
@@ -7,6 +6,7 @@ import {
   handlePostProduct,
   handlePutProduct,
 } from "../../controllers/api/productsController.js";
+import { isAdmin, isAuthenticated } from "../../middlewares/authToken.js";
 
 const routerProducts = Router();
 

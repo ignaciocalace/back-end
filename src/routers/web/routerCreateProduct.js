@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { renderCreateProduct } from "../../controllers/web/productControllerWeb.js";
 import { isAuthenticated } from "../../middlewares/authToken.js";
+import { renderCreateProduct } from "../../controllers/web/productControllerWeb.js";
 
 export const routerCreateProduct = Router();
 

@@ -1,5 +1,5 @@
-import { userManager } from "../dao/DB/userManager.js";
 import UserDTO from "../dao/models/userDTO.js";
+import { userManager } from "../dao/DB/userManager.js";
 
 class UsersRepository {
   constructor(usersDao) {

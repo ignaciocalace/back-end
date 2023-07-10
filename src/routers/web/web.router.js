@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { routerRealTime } from "./routerRealTime.js";
 import { routerChat } from "./routerChat.js";
-import routersViewUsers from "./routerViewsUsers.js";
-import { routerCreateProduct } from "./routerCreateProduct.js";
-import { routerForgotPass } from "./routerForgotPass.js";
 import routerResetPass from "./routerResetPass.js";
+import { routerRealTime } from "./routerRealTime.js";
+import routersViewUsers from "./routerViewsUsers.js";
+import { routerForgotPass } from "./routerForgotPass.js";
+import { routerCreateProduct } from "./routerCreateProduct.js";
 
 export const webRouter = Router();
 

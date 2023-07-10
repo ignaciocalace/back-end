@@ -6,6 +6,7 @@ import {
   isLastConnected,
 } from "../../middlewares/authToken.js";
 import { usersService } from "../../services/users.service.js";
+
 const routerViewsUsers = Router();
 
 routerViewsUsers.get("/", (req, res) => {

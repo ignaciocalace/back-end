@@ -1,9 +1,9 @@
 import { Cart } from "../../dao/models/Cart.js";
 import { errors } from "../../errors/errors.js";
-import { errorHandler } from "../../middlewares/errorsHandler.js";
 import { cartsService } from "../../services/carts.service.js";
-import { productsService } from "../../services/products.service.js";
+import { errorHandler } from "../../middlewares/errorsHandler.js";
 import { ticketsService } from "../../services/tickets.service.js";
+import { productsService } from "../../services/products.service.js";
 
 export async function handlePostCart(req, res) {
   try {

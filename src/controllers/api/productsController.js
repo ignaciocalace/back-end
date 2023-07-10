@@ -1,6 +1,7 @@
-import { Product } from "../../dao/models/Product.js";
 import { errors } from "../../errors/errors.js";
+import { Product } from "../../dao/models/Product.js";
 import { errorHandler } from "../../middlewares/errorsHandler.js";
+import { emailService } from "../../services/mailing.service.js";
 import { productsService } from "../../services/products.service.js";
 
 export async function handleGetAllProducts(req, res) {
@@ -37,6 +38,7 @@ export async function handleGetAllProducts(req, res) {
       res.status(200);
     }
     const isProducts = productsPaginate.docs.length > 0;
+
     let productsToShow = productsPaginate.docs.map((e) => ({
       _id: e._id,
       title: e.title,
@@ -49,12 +51,14 @@ export async function handleGetAllProducts(req, res) {
       thumbnails: e.thumbnails,
     }));
     const userData = req["user"];
+    const isAdmin = req["user"]["role"] === "admin";
     res.render("products", {
       isProducts,
       productsToShow,
       productsPaginate,
       isValid,
       userData,
+      isAdmin,
     });
   } catch (err) {
     new errorHandler(errors.default, req, req.res);
@@ -124,16 +128,19 @@ export async function handleDeleteProduct(req, res) {
     ) {
       const deleteResult = await productsService.deleteProduct("_id", pid);
       if (deleteResult.deletedCount === 1) {
-        await emailService.send(
-          productToDelete.owner,
-          "Product Deleted",
-          "<h2>Your product has been deleted.</h2>"
-        );
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(productToDelete.owner)) {
+          await emailService.send(
+            productToDelete.owner,
+            "Product Deleted",
+            "<h2>Your product has been deleted.</h2>"
+          );
+        }
         return res.status(200).json("Product deleted successfully");
       }
     }
     throw new errorHandler(errors.NOT_FOUND);
   } catch (err) {
-    new errorHandler(errors.INVALID_ARG, req, res);
+    new errorHandler(errors.DATABASE_ERROR, req, res);
   }
 }

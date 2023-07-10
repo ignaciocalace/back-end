@@ -1,13 +1,13 @@
 import { Router } from "express";
-import authUsers from "./routerAuthUsers.js";
+import routerUsers from "./routerUsers.js";
 import routerCarts from "./routerCarts.js";
+import authUsers from "./routerAuthUsers.js";
 import routerProducts from "./routerProducts.js";
 import currentUser from "./routerCurrentUser.js";
+import routerRecoverPass from "./routerRecoverPass.js";
+import sendMail from "../../controllers/api/mailingController.js";
 import generateProductMock from "../../controllers/api/mockupController.js";
 import { loggerTest } from "../../controllers/api/loggerTestController.js";
-import sendMail from "../../controllers/api/mailingController.js";
-import routerUsers from "./routerUsers.js";
-import routerRecoverPass from "./routerRecoverPass.js";
 
 export const apiRouter = Router();
 

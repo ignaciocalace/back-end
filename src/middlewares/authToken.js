@@ -1,6 +1,6 @@
 import passport from "passport";
-import { errorHandler } from "./errorsHandler.js";
 import { errors } from "../errors/errors.js";
+import { errorHandler } from "./errorsHandler.js";
 import { usersService } from "../services/users.service.js";
 
 const authenticate = (req, res, next, roles) => {

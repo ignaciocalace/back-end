@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { app } from "../src/app/app.js";
+
 const CNX_STR = "mongodb://localhost/testEcommerce";
 const PORT = 8080;
 

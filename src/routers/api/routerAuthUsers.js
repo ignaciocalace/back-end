@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { loginController } from "../../controllers/api/loginController.js";
 import {
   authenticateLogin,
   authenticateRegister,
   authenticateWithGithub,
   authenticateWithGithub_CB,
 } from "../../controllers/api/authController.js";
+import { Router } from "express";
+import { loginController } from "../../controllers/api/loginController.js";
 
 const authUsers = Router();
 

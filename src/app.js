@@ -1,15 +1,15 @@
 import express from "express";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import handlebars from "express-handlebars";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import handlebars from "express-handlebars";
 
+import { logger } from "./middlewares/logger.js";
 import { apiRouter } from "./routers/api/api.router.js";
 import { webRouter } from "./routers/web/web.router.js";
-import { passportInitialize } from "./middlewares/passport.js";
 import { COOKIESIGN, PASSJWT } from "./config/passwords.js";
-import { logger } from "./middlewares/logger.js";
+import { passportInitialize } from "./middlewares/passport.js";
 
 export const app = express();
 

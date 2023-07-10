@@ -1,5 +1,5 @@
-import { errors } from "../errors/errors.js";
 import { winstonLogger } from "./logger.js";
+import { errors } from "../errors/errors.js";
 
 export function errorHandler(error, req = null, res = null, next = null) {
   if (!res) {

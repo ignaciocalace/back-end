@@ -1,67 +1,79 @@
-<div >
-    {{#if userData.email}}
+<div>
+  {{#if userData.email}}
+    <h2>Welcome {{userData.name}}</h2>
+    <p>Role: {{userData.role}}</p>
 
-      <h2>Welcome {{userData.name}}</h2>
-      <p>Role: {{userData.role}}</p>
-      
-        <div class="nav-btn">
-          <form action="/profile" method="get">
-            <button class="green-btn" type="submit">Profile</button>
-          </form>  
-          <form action="/api/carts/{{userData.cart}}"  method="get">
-            <button class="brown-btn"type="submit">Cart</button>
-          </form>
-          <form action="/logout"  method="get">
-            <button class="red-btn"type="submit">Logout</button>
-          </form>
-        </div>
-          
+    <div class="nav-btn">
+      <form action="/profile" method="get">
+        <button class="green-btn" type="submit">Profile</button>
+      </form>
+      <form action="/api/carts/{{userData.cart}}" method="get">
+        <button class="brown-btn" type="submit">Cart</button>
+      </form>
+      <form action="/logout" method="get">
+        <button class="red-btn" type="submit">Logout</button>
+      </form>
+    </div>
 
-      {{#if isValid}}
-        {{#if isProducts}}
-          <h3>Products</h3>
-          {{#each productsToShow}}
-            <ul>
-
-              <li>Title: {{title}}</li>
-              <li>Description: {{description}}</li>
-              <li>Code: {{code}}</li>
-              <li>Price: {{price}}</li>
-              <li>Status: {{status}}</li>
-              <li>Category: {{category}}</li>
-              <li>Stock: {{stock}}</li>
-              <li>Thumbnails: {{thumbnails}}</li>         
+    {{#if isValid}}
+      {{#if isProducts}}
+        <h3>Products</h3>
+        {{#each productsToShow}}
+          <ul>
+            <li>Title: {{title}}</li>
+            <li>Description: {{description}}</li>
+            <li>Code: {{code}}</li>
+            <li>Price: {{price}}</li>
+            <li>Status: {{status}}</li>
+            <li>Category: {{category}}</li>
+            <li>Stock: {{stock}}</li>
+            <li>Thumbnails: {{thumbnails}}</li>
+            {{#if ../isAdmin}}
               <form>
-                <input required type="number" id="quantity" name="quantity" min="1" max="{{stock}}"><br><br>
-                <input type="hidden" id="idProduct" name="idProduct" value={{_id}}>
-                <input type="hidden" id="idCart" name="idCart" value="{{../userData.cart}}">
-                <button type="button" onclick="sendToCart(event)">Add to Cart</button>
+                <input
+                  type="hidden"
+                  id="deleteBtnPrd"
+                  name="deleteBtnPrd"
+                  value="{{_id}}"
+                />
+                <button
+                  type="button"
+                  class="red-btn"
+                  onclick="deleteProd(event)"
+                >Delete Product</button>
               </form>
-
-            </ul>
-          {{/each}}
-          <div>
-            {{#if productsPaginate.hasPrevPage}}
-                <a href={{productsPaginate.prevLink}}><< Previous Page</a>
+              {{else}}
+                <form>
+                  <input required type="number" id="quantity" name="quantity" min="1" max="{{stock}}"><br><br>
+                  <input type="hidden" id="idProduct" name="idProduct" value={{_id}}>
+                  <input type="hidden" id="idCart" name="idCart" value="{{../userData.cart}}">
+                  <button type="button" onclick="sendToCart(event)">Add to Cart</button>
+                </form>
             {{/if}}
-            &nbsp;
-            {{productsPaginate.page}}
-            &nbsp;
-            {{#if productsPaginate.hasNextPage}}
-                <a href={{productsPaginate.nextLink}}>Next Page >></a>
-            {{/if}} 
-          </div>
-        {{else}}
-          <h3>No products to show</h3>
-        {{/if}}
+            
+          </ul>
+        {{/each}}
+        <div>
+          {{#if productsPaginate.hasPrevPage}}
+            <a href={{productsPaginate.prevLink}}><< Previous Page</a>
+          {{/if}}
+        
+          {{productsPaginate.page}}
+         
+          {{#if productsPaginate.hasNextPage}}
+            <a href={{productsPaginate.nextLink}}>Next Page >></a>
+          {{/if}}
+        </div>
       {{else}}
-        <h3>Invalid Page Number</h3>
+        <h3>No products to show</h3>
       {{/if}}
-  
-
-       {{else}}
-       <h2>You must login to see products</h2>
-       <a href="/login">Return to Login</a>
+    {{else}}
+      <h3>Invalid Page Number</h3>
     {{/if}}
-  </div>
-<script src="/js/productsCart.js"></script>
+  {{else}}
+    <h2>You must login to see products</h2>
+    <a href="/login">Return to Login</a>
+  {{/if}}
+</div>
+<script src="/js/productsCart.js" ></script>
+
